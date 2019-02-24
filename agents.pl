@@ -8,14 +8,14 @@ new_agent( Name ) :-
 		 citizenship^^1,
 		 off^^[opn^^0.0, sconf^^0.0, mu^^0.0, oij^^[], wij^^[], aij^^[]]
                 ],
-        b_setval( Name, Agent ).
+        b_setval( Name, Agent ).  % Set global variable Name to Agent list
 
 
 %% create agents
 
 make_agents( Agents ) :-
-        hard_wired_agents( Agents ), !,
-        make_each_agent( Agents ).
+        hard_wired_agents( Agents ), !, % Agents set to the list defined in hard_wired_agents
+        make_each_agent( Agents ).  % Each agent in the hard_wired_agents list is created individually
 
 make_agents( Agents ) :-
         make_each_agent( Agents ).
@@ -24,6 +24,8 @@ make_each_agent( [] ).
 make_each_agent( [H|T] ) :-
         new_agent( H ),
         make_each_agent( T ).
+
+% Agents pre-specified for consistency. These will form the society of SimDemopolis
 
 %hard_wired_agents( [ann, bob, chr, dan, eve] ).
 %hard_wired_agents( [ann, bob, chr, dan, eve, fre, geo, hal, ian, jez] ).

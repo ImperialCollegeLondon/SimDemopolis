@@ -6,7 +6,7 @@
 
 :- op( 500, xfy, ^^ ).
 
-:- [access].
+:- [access].   % Main graph and agent manipulation code
 :- [institution].
 :- [agents].
 :- [pprint].
@@ -25,7 +25,7 @@
 d :-
 	make_institution( I ),
         make_agents( Agents ),
-        register( I, Agents ),
+        register( I, Agents ),   % Agents are registered to institution I 
 	%init_socnet( Agents, ring ),
 	%init_socnet( Agents, fully_connected ),
 	init_socnet( Agents, random1 ),

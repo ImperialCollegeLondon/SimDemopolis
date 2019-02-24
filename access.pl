@@ -35,7 +35,7 @@ assign_path_val( [H|Rest1], Path, Value, [H|Rest2] ) :-
 
 
 add_path_val( Name, Path, Value ) :-
-        b_getval( Name, Agent ),
+        b_getval( Name, Agent ), % Retrive agent from global database
         addval_path_val( Agent, Path, Value, NewAgent ),
 	b_setval( Name, NewAgent ).
 

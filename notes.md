@@ -48,6 +48,9 @@ re-creating Demopolis in a different programming language be a better idea?
 ## Network Structure
 - Network is a random graph G = <A,p>, where A is the set of agents, and p is the probability of a link between any two members of A.
 
+### Small-World Network (Watts-Strogatz Model)
+- Problem - Needs to start with a ring network and then randomly re-arrange itself. How to implement this 2-stage process in Prolog?
+
 ## General Implementation Notes
 - When reading stuff, take notes. It may slow reading down significantly, 
 but reduces the need to go back and re-read stuff later
