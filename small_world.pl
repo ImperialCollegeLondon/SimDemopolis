@@ -1,5 +1,7 @@
 % TODO: Write a test for this code
+:- write("In the file").
 init_socnet2(Agents, small_world) :-
+    write("In small world code"),
     link_neighbours2(Agents, Agents).
 
 % Find nodes in graph a distance of one and two from the specified node

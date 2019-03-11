@@ -17,6 +17,7 @@ in the report
 - Read the Prolog book
 - Do the prolog exercises I never did last term
 - Examine _SimDemoplis in thourough detail, and annotate what exatly every bit of it does
+- See if there is a way of modularizing the code (in a similar way one would do with object-oriented code)
 
 ### Interim Report
 - Finish the introduction

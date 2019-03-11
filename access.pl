@@ -1,4 +1,4 @@
-/*
+/* Use these for sequential update of social network
 ** get_path_val( Agent, Path, Value )	returns Value at end of ^^ path
 ** set_path_val( Agent, Path, Value )	sets Value to end of ^^ path
 ** add_path_val( Agent, Path, Value )	if Path^^L is a list, adds Value to L
