@@ -18,6 +18,8 @@ in the report
 - Do the prolog exercises I never did last term
 - Examine _SimDemoplis in thourough detail, and annotate what exatly every bit of it does
 - See if there is a way of modularizing the code (in a similar way one would do with object-oriented code)
+- Explain SimDempolis code in detail
+- Dynamics (of network)
 
 ### Interim Report
 - Finish the introduction
@@ -41,6 +43,14 @@ re-creating Demopolis in a different programming language be a better idea?
   1. A baseline test for equal sharing of roles
   2. Detection of "power grabs" and "free riding
   3. Bias detection in the role assignment protocol
+- Dynamics - how the network changes over time
+  - How it evolves
+  -- what happens if a node is taken out(particularly well-connected one)
+  - Is the graph still connected? 
+  - Agents could have a "lifetime" property, so they die of old age
+  - OR simulate accidents
+  - Agents who encouraged others to pass on knowledge, or those who don't want to share their knowledge
+
   
 ## SimDemopolis
 - The ^^ operator means "points to"

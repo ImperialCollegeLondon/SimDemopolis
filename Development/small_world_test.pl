@@ -25,3 +25,6 @@ create_small_world() :-
         register( I, Agents ),   % Agents are registered to institution I
     init_socnet2( Agents, small_world ),
     write("Small world network initialized"), nl.
+
+    % TODO: Calculate network statistics (e.g. clustering)
+    % TODO: Draw this network as a picture

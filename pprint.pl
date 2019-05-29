@@ -1,28 +1,27 @@
-
 %% pretty-print institution
 
 inst_inspector( I ) :-
         get_path_val( I, inst, Name ),
-        get_path_val( I, members, M ), 
-        get_path_val( I, players, P ), 
-        get_path_val( I, timeinrole, TinR ), 
-        get_path_val( I, rolehistory, RH ), 
-        get_path_val( I, timeinrole, TinR ), 
-        get_path_val( I, rolehistory, RH ), 
-        get_path_val( I, immutable_rules, IR ), 
-        get_path_val( I, mutable_rules, MR ), 
-        get_path_val( I, knowcode^^participation, LegPar ), 
-        get_path_val( I, knowcode^^role_assign, LegRole ), 
-        get_path_val( I, knowcode^^access_control, LegAcc ), 
-        get_path_val( I, knowcode^^resource_alloc, LegAll ), 
-        get_path_val( I, knowcode^^minor_claims, LegMC ), 
+        get_path_val( I, members, M ),
+        get_path_val( I, players, P ),
+        get_path_val( I, timeinrole, TinR ),
+        get_path_val( I, rolehistory, RH ),
+        get_path_val( I, timeinrole, TinR ),
+        get_path_val( I, rolehistory, RH ),
+        get_path_val( I, immutable_rules, IR ),
+        get_path_val( I, mutable_rules, MR ),
+        get_path_val( I, knowcode^^participation, LegPar ),
+        get_path_val( I, knowcode^^role_assign, LegRole ),
+        get_path_val( I, knowcode^^access_control, LegAcc ),
+        get_path_val( I, knowcode^^resource_alloc, LegAll ),
+        get_path_val( I, knowcode^^minor_claims, LegMC ),
 
         pp( inst, Name, 0 ),
         pp( members, M, 4 ),
         pp( players, P, 4 ),
 
-        pp( timeinrole, TinR, 4 ), 
-        pp( rolehistory, RH, 4 ), 
+        pp( timeinrole, TinR, 4 ),
+        pp( rolehistory, RH, 4 ),
 
 	pp( immutable_rules, IR, 4 ),
 	pp( mutable_rules, MR, 4 ),
@@ -36,26 +35,28 @@ inst_inspector( I ) :-
 
 %% pretty-print agent/agents
 
+%% Inspect agents in institution I
 agents_inspector( I ) :-
 	get_path_val( I, members, M ),
 	inspect_each_agent( M ).
 
+%% Pretty-print all agents in a list
 inspect_each_agent( [] ).
 inspect_each_agent( [A|T] ) :-
 	agent_inspector( A ),
 	inspect_each_agent( T ).
 
-
+%% Pretty-print single agent
 agent_inspector( A ) :-
 	get_path_val( A, agt, Name ),
         get_path_val( A, msgq, MsgQ ),
-        get_path_val( A, socnet, SN ), 
-        get_path_val( A, off^^opn, Opinion ), 
-        get_path_val( A, off^^sconf, SelfConf ), 
-        get_path_val( A, off^^mu, Mu ), 
-        get_path_val( A, off^^wij, WeightIJ ), 
-        get_path_val( A, off^^aij, AffinityIJ ), 
-        get_path_val( A, off^^oij, OpinionIJ ), 
+        get_path_val( A, socnet, SN ),
+        get_path_val( A, off^^opn, Opinion ),
+        get_path_val( A, off^^sconf, SelfConf ),
+        get_path_val( A, off^^mu, Mu ),
+        get_path_val( A, off^^wij, WeightIJ ),
+        get_path_val( A, off^^aij, AffinityIJ ),
+        get_path_val( A, off^^oij, OpinionIJ ),
 	pp( agent, Name, 0 ),
         pp( 'message queue', MsgQ, 4 ),
         pp( 'social network', SN, 4 ),
@@ -67,7 +68,7 @@ agent_inspector( A ) :-
 	pp( affinity_ij, AffinityIJ, 8 ),
 	pp( opinion_ij, OpinionIJ, 8 ),
 	true.
-	
+
 
 pp( Field, Value, Tab ) :-
         pp_onoff( Field, on ), !,
@@ -83,7 +84,7 @@ pp_onoff( inst, on ).
 pp_onoff( members, on ).
 pp_onoff( players, on ).
 pp_onoff( timeinrole, on ).
-pp_onoff( rolehistory, on ). 
+pp_onoff( rolehistory, on ).
 pp_onoff( immutable_rules, on ).
 pp_onoff( mutable_rules, on ).
 pp_onoff( participation, on ).
@@ -103,4 +104,3 @@ pp_onoff( opinion, on ).
 pp_onoff( weight_ij, off ).
 pp_onoff( affinity_ij, off ).
 pp_onoff( opinion_ij, off ).
-
