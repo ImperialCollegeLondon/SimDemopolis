@@ -48,7 +48,8 @@ inspect_each_agent( [A|T] ) :-
 
 %% Pretty-print single agent
 agent_inspector( A ) :-
-	get_path_val( A, agt, Name ),
+        get_path_val( A, agt, Name ),
+        get_path_val( A, citizenship, Citizenship ),
         get_path_val( A, msgq, MsgQ ),
         get_path_val( A, socnet, SN ),
         get_path_val( A, off^^opn, Opinion ),
@@ -57,10 +58,11 @@ agent_inspector( A ) :-
         get_path_val( A, off^^wij, WeightIJ ),
         get_path_val( A, off^^aij, AffinityIJ ),
         get_path_val( A, off^^oij, OpinionIJ ),
-	pp( agent, Name, 0 ),
-        pp( 'message queue', MsgQ, 4 ),
-        pp( 'social network', SN, 4 ),
-	pp( 'opinion formation', " ", 4 ),
+        pp( agent, Name, 0 ),
+        pp( 'citizenship', Citizenship, 4),
+        pp( 'message_queue', MsgQ, 4 ),
+        pp( 'social_network', SN, 4 ),
+	pp( 'opinion_formation', " ", 4 ),
 	pp( selfconf, SelfConf, 8 ),
 	pp( mu, Mu, 8 ),
 	pp( opinion, Opinion, 8 ),
@@ -73,8 +75,7 @@ agent_inspector( A ) :-
 pp( Field, Value, Tab ) :-
         pp_onoff( Field, on ), !,
         tab( Tab ),
-        write( Field ), write( ': ' ), write( Value ),
-        nl.
+        write( Field ), write( ': ' ), write( Value ), nl.
 
 pp( Field, _, _ ) :-
 	pp_onoff( Field, off ).
@@ -95,12 +96,13 @@ pp_onoff( minor_claims, on ).
 
 
 pp_onoff( agent, on ).
-pp_onoff( 'message queue', off ).
-pp_onoff( 'social network', on ).
-pp_onoff( 'opinion formation', off ).
-pp_onoff( selfconf, off ).
-pp_onoff( mu, off ).
+pp_onoff( 'citizenship', on ).
+pp_onoff( 'message_queue', on ).
+pp_onoff( 'social_network', on ).
+pp_onoff( 'opinion_formation', on ).
+pp_onoff( selfconf, on ).
+pp_onoff( mu, on ).
 pp_onoff( opinion, on ).
-pp_onoff( weight_ij, off ).
-pp_onoff( affinity_ij, off ).
-pp_onoff( opinion_ij, off ).
+pp_onoff( weight_ij, on ).
+pp_onoff( affinity_ij, on ).
+pp_onoff( opinion_ij, on ).

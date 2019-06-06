@@ -1,3 +1,4 @@
+%% rg generally stands for role Gini
 
 particip_check( I ) :-
 	get_path_val( I, members, Agents ),
@@ -45,12 +46,12 @@ yn_rolegini( _, [no] ).
 
 declare_rg( I, _, rolegini, W ) :-
         member( (yes,X), W ), !,
-        write( '1,' ),
+        write( 'ra_vote: True' ),nl,
         %write( yes ), write( ' ' ), write( X ), nl,
         true.
 declare_rg( I, _, rolegini, W ) :-
         member( (no,X), W ), !,
-        write( '0,' ),
+        write( 'ra_vote: False' ),nl,
         %write( no ), write( ' ' ), write( X ), nl,
         true.
 
@@ -89,4 +90,3 @@ amend( I, participation, M ) :-
 	get_path_val( I, knowcode^^role_assign^^call, G ),
         Goal =.. [G, I, role(chair, participation), M ],
         call( Goal ).
-
