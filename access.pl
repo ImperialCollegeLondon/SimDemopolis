@@ -78,7 +78,7 @@ gpv(N,V,P) :- get_path_val(N,V,P).
 */
 dmp_agents( [] ).
 dmp_agents( [H|T] ) :-
-	dmp_agent( H ), 
+	dmp_agent( H ),
 	nl, nl,
 	dmp_agents( T ).
 
@@ -107,4 +107,3 @@ pp_fdvals( [Fd^^Val|Rest], Tab5 ) :-
 	tab( 5 ),
 	writeln( Val ),
 	pp_fdvals( Rest, Tab5 ).
-

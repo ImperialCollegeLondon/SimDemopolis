@@ -26,18 +26,26 @@
 :- [stats].
 
 run :-
-        get_args( Args ),
+    %spy(get_args),
+    get_args( Args ),
+        subset([
+            agent_num(N),
+            net_top(Socnet_Type_),
+            net_prob(P),
+            sw_k(K),
+            has_skiver(Skiver_state)], Args ),
         make_institution( I ),
-        make_agents( Agents ),
+        make_agents( Agents, N ),
         register( I, Agents ),   % Agents are registered to institution I
 	%init_socnet( Agents, ring ),
 	%init_socnet( Agents, fully_connected ),
         %trace,
-        member( net_top(Socnet_Type), Args ),
-	init_socnet( Agents, Socnet_Type ),
-        initialise_off( Agents ),
-        %inspect_each_agent( Agents ),
+        %spy(member),
+	init_socnet( Agents, Socnet_Type, [P,K] ),
         %notrace,
+        initialise_off( Agents ),
+        % inspect_each_agent( Agents ),
+
 	init_timeinrole( I ),
 	init_utr( I ),
 	founder( I ),
@@ -49,12 +57,12 @@ run :-
 	init_resource_alloc( I, resource_alloc ),
 	init_minor_claims( I, minor_claims ),
 	inst_inspector( I ),
-        member( has_skiver(Skiver_state), Args),
 	skiver( I , Skiver_state ),
         b_setval( tick, 0 ),
 	% Third argument denotes amount of time (the number of times the test is)
         % TODO: Used to be 60. Change this later, or find a way to reduce memory usage
         member( tick_num(Ticks), Args ),
+        write_socnet( Agents, Ticks ),
 	role_assign_test( I, Agents, Ticks ).
 	%true.
 
@@ -78,7 +86,19 @@ get_args(Opts) :-
       help(['Number of "ticks" (time units) the role assignment process runs for.'])],
      [opt(has_skiver), type(boolean), default(false),
       shortflags(['f']), longflags(['skiver', 'free_rider']),
-     help('Is there a \'Skiver\' among the agents, who has a propensity to freeride? (chosen randomly)')]
+      help('Is there a \'Skiver\' among the agents, who has a propensity to freeride? (chosen randomly)')],
+     [opt(net_prob), type(float), default(0.25),
+     shortflags(['P']), longflags(['probability']),
+     help(['Social network probability: '
+          , ' For a random network, this is the probability that a link is made between two nodes.'
+         , '  For a small-world network, this is the probability that a link from the ring network is reassigned.'])],
+    [opt(sw_k), type(integer), default(1),
+     shortflags(['K']), longflags(['small_world_connections','small_world_k'
+                                   ,'swk']),
+     help('Number of links made to each node in the small world network.')],
+    [opt(agent_num), type(integer), default(30),
+     shortflags(['N']), longflags(['agent_number', 'agent_num']),
+    help('Total number of Agents in SimDemopolis')]
     ],
     opt_parse( OptsSpec, Cl_Args, Opts, PosArgs ).
 
@@ -125,3 +145,10 @@ i_role_gini( I ) :-
     gini( TinR, IG ),
     write( IG ), nl,
     true.
+
+% If the number of ticks is 0, print Agent information. This allows a social
+% network to be generated in less computing time
+write_socnet( Agents, 0 ):-
+    write("NEW ROUND"),nl,
+    inspect_each_agent( Agents ).
+write_socnet( _,_ ).

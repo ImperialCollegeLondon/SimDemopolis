@@ -5,17 +5,17 @@
 **	random -- G(N,P) each pair of N nodes in Graph G is connected with probability P
 */
 
-init_socnet( Agents, ring ) :-
+init_socnet( Agents, ring, _ ) :-
         link_neighbours( Agents, Agents ).
-init_socnet( Agents, fully_connected ) :-
+init_socnet( Agents, fully_connected, _ ) :-
 	link_all2all( Agents, Agents ).
-init_socnet( Agents, random ) :-
-	link_all2some( Agents, Agents ).
+init_socnet( Agents, random, [P|_] ) :-
+	link_all2some( Agents, Agents, P ).
 
-init_socnet( Agents, random1 ) :-
-	link_all2some( Agents ),
+init_socnet( Agents, random1, [P|_] ) :-
+	link_all2some( Agents, P ),
 	at_least1_link( Agents, Agents ).
-	
+
 
 link_neighbours( [], _ ).
 link_neighbours( [H|T], Agents ) :-
@@ -47,19 +47,18 @@ link_one2rest( A, [H|T] ) :-
 	add_path_val( A, socnet, H ),
 	link_one2rest( A, T ).
 
-link_all2some( [] ).
-link_all2some( [A|Rest] ) :-
-	link_one2some( A, Rest ),
-	link_all2some( Rest ).
+link_all2some( [] , _ ).
+link_all2some( [A|Rest], P ) :-
+	link_one2some( A, Rest, P ),
+	link_all2some( Rest, P ).
 
-link_one2some( _, [] ).
-link_one2some( A, [H|T] ) :-
-	random_link_prob( P ),
+link_one2some( _, [], _ ).
+link_one2some( A, [H|T], P ) :-
 	maybe( P ), !,
 	link_agents( A, H ),
-	link_one2some( A, T ).
-link_one2some( A, [_|T] ) :-
-	link_one2some( A, T ).
+	link_one2some( A, T, P ).
+link_one2some( A, [_|T], P ) :-
+	link_one2some( A, T, P ).
 
 link_agents( A1, A2 ) :-
 	get_path_val( A2, socnet, SN ),
@@ -68,9 +67,6 @@ link_agents( A1, A2 ) :-
 	add_path_val( A1, socnet, A2 ),
 	add_path_val( A2, socnet, A1 ).
 
-random_link_prob( 0.25 ).
-
-	
 at_least1_link( [], _ ).
 at_least1_link( [A|Rest], Agents ) :-
 	get_path_val( A, socnet, [] ), !,

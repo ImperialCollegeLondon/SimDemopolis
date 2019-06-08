@@ -168,15 +168,31 @@ def pp2dict(pp_str):
     return output
 
 class AnalyzeNetwork():
-    def plot_graph(self, sn_dict, file_name='', show=True):
+    def plot_graph(self, sn_dict, file_name='', show=True, circle=False):
         G = nx.json_graph.node_link_graph(sn_dict, False)
+        if circle:
+             nx.draw_circular(G, with_labels=True, node_size=600)
+        else:
+             nx.draw(G, with_labels=True, node_size=600)
         nx.draw(G, with_labels=True, node_size=600)
         if file_name:
             plt.savefig(file_name)
         
         if show:
             plt.show()
-        
+            
+    def gen_socnet(self, net_top, size=10, prob=0.25, k=2):
+        sd_dict = simDemopolis(True, 0, size, prob, k)
+        nx_dict = sd2nx(sd_dict)
+        return nx_dict
+    
+    def plot_sn_growth(self, net_top, size, prob=0.25, k=2):
+        nx_dict = self.gen_socnet(net_top, size, prob, k)
+    
+    def plot_ring(self, size=30):
+        nx_dict = self.gen_socnet(self, 'ring', size)
+        self.plot
+
     def sd2nx(self, sd_dict):
         nx_dict = {'nodes':[], 'links':[]}
         # Extract irst tick (all that is needed for social network)
@@ -217,7 +233,7 @@ def test_parse():
  Write sample SimDemopolis output to file (for debugging)
 """
 def create_test_output():
-    (stdout, stderr) = simDemopolis(True, 10)
+    (stdout, stderr) = simDemopolis(False, 0)
     with open('Development/test_output.txt', 'w') as f:
         f.write(stdout)
     print(stderr)
@@ -338,23 +354,27 @@ class CivicParticipation(Experiment):
 """ 
 Run the SimDemopolis Prolog Queries, and return the stdout and stderr text
 """ 
-def simDemopolis(interactive, ticks):
+def simDemopolis(interactive, ticks, size=30, prob=0.25, k=2):
     halt = ""
-    if interactive:
+    if not interactive:
         halt = "-t halt "
-    sim_script = "swipl -s main.pl -g run {}--socnet small_world --ticks {}".format(halt, ticks)
+        
+    sim_script = "swipl -s main.pl -g run {}--socnet small_world \
+    --agent_num {} --probability {} --small_world_connections {} \
+    --ticks {}".format(halt, size, prob, k, ticks)
     Output = subprocess.run(shlex.split(sim_script),
                             text=True,
-                            capture_output=True)
+                            shell=True,
+                            capture_output=(not interactive))
     print(type(Output))
     return (Output.stdout, Output.stderr)     
 
 if __name__ == "__main__":
     #pp = pprint.PrettyPrinter(indent=4)
-    sk = Skiver()
-    sk.load_result()
-    sk.plot('Skiver/plot.png')
+    #sk = Skiver()
+    #sk.load_result()
+    #sk.plot('Skiver/plot.png')
     #civic_participation.load_result()
     #civic_participation.plot('Civic-Participation/test.eps')
-    #create_test_output()
+    create_test_output()
     #test_graph()
