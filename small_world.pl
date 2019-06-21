@@ -76,11 +76,3 @@ random_reassign_agent(Agents, A1, A1_new, A2, A2_new, P ) :-
     random_member( A2_new, Agents ).
 % As stay the same upon above rule failing
 random_reassign_agent( _, A1, A1, A2, A2, _ ).
-
-/*
-random_reassign_graph(Agents, [], _).
-random_reassign_graph(Agents, [[A1_old,A2_old]|Rest_old], [[A1_new,A2_new]|Rest_new]) :-
-    random_reassign_agent(Agents, A1_old, A1_new),
-    random_reassign_agent(Agents, A2_old, A2_new),
-    random_reassign_graph(Agents, Rest_old, Rest_new).
-*/

@@ -20,6 +20,7 @@ find_path_val( [_|Rest], Path, Value ) :-
 	find_path_val( Rest, Path, Value ).
 
 
+% Set the Path of Name to Value, no matter what the current value is
 set_path_val( Name, Path, Value ) :-
         b_getval( Name, Agent ),
         assign_path_val( Agent, Path, Value, NewAgent ),
@@ -34,6 +35,7 @@ assign_path_val( [H|Rest1], Path, Value, [H|Rest2] ) :-
 	assign_path_val( Rest1, Path, Value, Rest2 ).
 
 
+% Append Value to the Path list of Name
 add_path_val( Name, Path, Value ) :-
         b_getval( Name, Agent ), % Retrive agent from global database
         addval_path_val( Agent, Path, Value, NewAgent ),
