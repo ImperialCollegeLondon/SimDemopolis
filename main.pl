@@ -10,11 +10,10 @@
 :- op( 500, xfy, ^^ ).
 
 :- [access].   % Main graph and agent manipulation code
-:- [institution].
-:- [agents].
-:- [pprint].
-:- [network].
-:- [small_world]. % This is new
+:- [institution]. % Set up institution
+:- [agents]. % Set up agents
+:- [pprint]. % pretty printing
+:- [network]. % Code for constructing social networks
 :- [comms].
 :- [elect].
 :- [minorclaims].
@@ -23,28 +22,24 @@
 :- [resalloc].
 :- [roleassign].
 :- [gini].
-:- [stats].
+:- [stats]. % Compute various statistics about SimDemopolis
 
 run :-
-    %spy(get_args),
-    get_args( Args ),
-        subset([
+        % spy(delete_largest_hub),
+        get_args( Args ),
+        subset( [
             agent_num(N),
-            net_top(Socnet_Type_),
+            net_top(Socnet_Type),
             net_prob(P),
             sw_k(K),
-            has_skiver(Skiver_state)], Args ),
+            sf_m(M),
+            has_skiver(Skiver_state),
+            tick_num(Ticks)], Args ),
         make_institution( I ),
         make_agents( Agents, N ),
         register( I, Agents ),   % Agents are registered to institution I
-	%init_socnet( Agents, ring ),
-	%init_socnet( Agents, fully_connected ),
-        %trace,
-        %spy(member),
-	init_socnet( Agents, Socnet_Type, [P,K] ),
-        %notrace,
+	init_socnet( Agents, Socnet_Type, [P,K,M] ),
         initialise_off( Agents ),
-        % inspect_each_agent( Agents ),
 
 	init_timeinrole( I ),
 	init_utr( I ),
@@ -59,10 +54,8 @@ run :-
 	inst_inspector( I ),
 	skiver( I , Skiver_state ),
         b_setval( tick, 0 ),
-	% Third argument denotes amount of time (the number of times the test is)
-        % TODO: Used to be 60. Change this later, or find a way to reduce memory usage
-        member( tick_num(Ticks), Args ),
         write_socnet( Agents, Ticks ),
+        % Third argument denotes amount of time (the number of times the test is)
 	role_assign_test( I, Agents, Ticks ).
 	%true.
 
@@ -95,10 +88,15 @@ get_args(Opts) :-
     [opt(sw_k), type(integer), default(1),
      shortflags(['K']), longflags(['small_world_connections','small_world_k'
                                    ,'swk']),
-     help('Number of links made to each node in the small world network.')],
+     help(['Number of links made to each node in the small world network.'
+          , '(often referred to as k)'])],
     [opt(agent_num), type(integer), default(30),
      shortflags(['N']), longflags(['agent_number', 'agent_num']),
-    help('Total number of Agents in SimDemopolis')]
+     help('Total number of Agents in SimDemopolis')],
+    [opt(sf_m), type(integer), default(1),
+     shortflags(['m']), longflags(['scale_free_links', 'scale_free_km', 'sfm']),
+     help(['Number of new links added per new node in the scale-free network'
+          , '(often referred to as m)'])]
     ],
     opt_parse( OptsSpec, Cl_Args, Opts, PosArgs ).
 
@@ -149,6 +147,10 @@ i_role_gini( I ) :-
 % If the number of ticks is 0, print Agent information. This allows a social
 % network to be generated in less computing time
 write_socnet( Agents, 0 ):-
-    write("NEW ROUND"),nl,
-    inspect_each_agent( Agents ).
+    write("NEW ROUND"), nl,
+    write('[tick,1]'), nl,
+    write('ra_vote: False'),
+    write('Begin Agent Inspection'), nl,
+    inspect_each_agent( Agents ),
+    write('End Agent Inspection'), nl.
 write_socnet( _,_ ).

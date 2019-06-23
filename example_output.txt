@@ -1,0 +1,84 @@
+inst: i
+    members: [a1,a2,a3,a4,a5]
+    players: []
+    timeinrole: [(a5,1),(a4,1),(a3,1),(a2,1),(a1,1)]
+    rolehistory: []
+    immutable_rules: [constitution^^[enactment,amendment,repeal,transmute]]
+    mutable_rules: [participation,legislation^^[role_assignment,access_control,resource_alloc,minor_claims]]
+        participation: [call^^particip_check,roles^^[chair^^a3,franchised^^[a1,a2,a3,a4,a5]],powers^^[chair^^[cfv,declare,resign],monitors^^[vote]],dof^^[who^^all,extent^^equal]]
+        role_assignment: [call^^rap_protocol,roles^^[director^^a3,racomm^^[a1,a2,a3,a4,a5]],powers^^[director^^[cfv,assign,invite,resign],racomm^^[vote]],dof^^[ram^^voting,wdm^^plurality]]
+        access_control: [call^^ac_control,roles^^[axcontroller^^a3,axcomm^^[a1,a2,a3,a4,a5]],powers^^[axcontroller^^[cfv,admit,eject,resign],axcomm^^[vote]],dof^^[wdm^^borda]]
+        resource_alloc: [call^^lpg_game,roles^^[allocator^^a3,players^^[]],powers^^[allocator^^[allocate,resign],players^^[provide,request]],dof^^[ra_method^^roles_first]]
+        minor_claims: [call^^mcp,roles^^[judge^^a3,foreperson^^_920,proponent^^_932,opponent^^_944,jurors^^[]],powers^^[judge^^[open,close,sentence],foreperson^^[find],proponent^^[submit],opponent^^[submit],jurors^^[vote]],dof^^[adjm^^jury,jurysize^^12,decision^^unanimous]]
+NEW ROUND
+[tick,1]
+ra_vote: FalseBegin Agent Inspection
+agent: a5
+    citizenship: 1
+    message_queue: []
+    social_network: [a4]
+    opinion_formation:  
+        selfconf: 0.1
+        mu: 0.58
+        opinion: 0.58
+        weight_ij: [(a5,0.1),(a4,0.9)]
+        affinity_ij: []
+        opinion_ij: []
+agent: a4
+    citizenship: 1
+    message_queue: []
+    social_network: [a5]
+    opinion_formation:  
+        selfconf: 0.31
+        mu: 0.69
+        opinion: 0.69
+        weight_ij: [(a4,0.31),(a5,0.69)]
+        affinity_ij: []
+        opinion_ij: []
+agent: a3
+    citizenship: 1
+    message_queue: []
+    social_network: [a2,a1]
+    opinion_formation:  
+        selfconf: 0.94
+        mu: 0.15
+        opinion: 0.15
+        weight_ij: [(a3,0.94),(a1,0.03),(a2,0.03)]
+        affinity_ij: []
+        opinion_ij: []
+agent: a2
+    citizenship: 1
+    message_queue: []
+    social_network: [a3]
+    opinion_formation:  
+        selfconf: 0.75
+        mu: 0.84
+        opinion: 0.84
+        weight_ij: [(a2,0.75),(a3,0.25)]
+        affinity_ij: []
+        opinion_ij: []
+agent: a1
+    citizenship: 1
+    message_queue: []
+    social_network: [a3]
+    opinion_formation:  
+        selfconf: 0.78
+        mu: 0.63
+        opinion: 0.63
+        weight_ij: [(a1,0.78),(a3,0.22)]
+        affinity_ij: []
+        opinion_ij: []
+End Agent Inspection
+
+inst: i
+    members: [a1,a2,a3,a4,a5]
+    players: []
+    timeinrole: [(a5,1),(a4,1),(a3,1),(a2,1),(a1,1)]
+    rolehistory: []
+    immutable_rules: [constitution^^[enactment,amendment,repeal,transmute]]
+    mutable_rules: [participation,legislation^^[role_assignment,access_control,resource_alloc,minor_claims]]
+        participation: [call^^particip_check,roles^^[chair^^a3,franchised^^[a1,a2,a3,a4,a5]],powers^^[chair^^[cfv,declare,resign],monitors^^[vote]],dof^^[who^^all,extent^^equal]]
+        role_assignment: [call^^rap_protocol,roles^^[director^^a3,racomm^^[a1,a2,a3,a4,a5]],powers^^[director^^[cfv,assign,invite,resign],racomm^^[vote]],dof^^[ram^^voting,wdm^^plurality]]
+        access_control: [call^^ac_control,roles^^[axcontroller^^a3,axcomm^^[a1,a2,a3,a4,a5]],powers^^[axcontroller^^[cfv,admit,eject,resign],axcomm^^[vote]],dof^^[wdm^^borda]]
+        resource_alloc: [call^^lpg_game,roles^^[allocator^^a3,players^^[]],powers^^[allocator^^[allocate,resign],players^^[provide,request]],dof^^[ra_method^^roles_first]]
+        minor_claims: [call^^mcp,roles^^[judge^^a3,foreperson^^_920,proponent^^_932,opponent^^_944,jurors^^[]],powers^^[judge^^[open,close,sentence],foreperson^^[find],proponent^^[submit],opponent^^[submit],jurors^^[vote]],dof^^[adjm^^jury,jurysize^^12,decision^^unanimous]]
