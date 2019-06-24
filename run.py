@@ -235,8 +235,8 @@ def plot_graph(sn_dict, file_name='', ax=None, title="", show=True,
                circle=False, figure=1, close=False, kamada_kawai=False):
     """Converts a dictionary (JSON) in the nx documentation) in an nx node-link 
     format into an nx graph, then plots this graph using MatPlotLib.
-    
-    Parameters
+
+Parameters
     ----------
     sn_dict : dictionary 
         The social network to be plotted, in a NetworkX dictionary
@@ -244,7 +244,6 @@ def plot_graph(sn_dict, file_name='', ax=None, title="", show=True,
     file_name : string
         The name of the file to save the graph in. If not 
         specified, the graph is not saved.
-    
     ax : matplotlib.pyplot.axes.Axes 
         The set of axes to draw the graph on. If not specified, a new
         figure and axes are created.    
@@ -339,7 +338,7 @@ def gini(x):
     # (Warning: This is a concise implementation, but it is O(n**2)
     # in time and memory, where n = len(x).  *Don't* pass in huge
     # samples!)
-
+    
     # Mean absolute difference
     mad = np.abs(np.subtract.outer(x, x)).mean()
     # Relative mean absolute difference
@@ -1329,6 +1328,257 @@ def test_sk_m_plot_range():
                             indep_var='m', root_dir=root_dir, has_skiver=True)                        
     cp.plot_range(rounds=10, ticks=3)
 
+def plot_sn_growth(net_top, size, prob=0.25, k=2):
+    nx_dict = gen_socnet(net_top, size, prob, k)
+    
+def plot_qs_clustering(socnet_top='random1', subdir='expt1'):
+    """Plots a graph of quasi-stability against the local clustering 
+    coefficient, based on a previously-run experiment. Quasi stability is 
+    defined as the number of times the voting state changes divided by the 
+    number of experiment rounds."""
+    expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
+                            'Rounds')
+    cp = CivicParticipation(socnet_top, expt_dir, False)
+    cp.load_result()
+    cp_matrix = cp.eval_cp()
+    qs_vec = cp.quasi_stability(cp_matrix)
+    qs_mean = np.mean(qs_vec)
+    print('Mean Quasi-Stability = {}'.format(qs_mean))
+    
+    c_vec = cp.clustering()
+    c_mean = np.mean(c_vec)
+    print('Mean Clustering Coefficient = {}'.format(c_mean))
+    # Save the quasi stability and clustering data as csv files
+    np.savetxt(os.path.join(expt_dir,"quasi_stability.csv"),
+                  qs_vec, delimiter=",")
+    np.savetxt(os.path.join(expt_dir,"clustering.csv"),
+                  c_vec, delimiter=",")
+    
+    plt.plot(c_vec, qs_vec, 'rx')
+    plt.xlabel('Local Clustering Coefficient')
+    plt.ylabel('Quasi-Stability (changes per tick)')
+    plt.savefig(os.path.join(expt_dir,'qs_clustering.eps'))
+    plt.show()
+    
+def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
+    expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
+                            'Rounds')
+    cp = CivicParticipation(socnet_top, expt_dir, False)
+    cp.load_result()
+    deg_tir_list = cp.degree_time_in_role()
+    deg_tir_matrix = deg_tir_list[round_num]
+    data_path = os.path.join(expt_dir, 
+                             'degree_time_in_role{}.csv'.format(round_num))
+    np.savetxt(data_path, deg_tir_matrix, delimiter=",")
+    plt.plot(deg_tir_matrix[:,0], deg_tir_matrix[:,1], 'rx')
+    plt.title('{}, round {}'.format(socnet_top, round_num+1))
+    plt.xlabel('Node Degree')
+    plt.ylabel('Time In Role')
+    img_path = os.path.join(expt_dir, 
+                             'degree_time_in_role{}.eps'.format(round_num))
+    plt.savefig(img_path)
+    plt.show()
+    
+def plot_deggini_tir(socnet_top='scale_free1', subdir='expt1'):
+    expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
+                            'Rounds')
+    cp = CivicParticipation(socnet_top, expt_dir, False)
+    cp.load_result()
+    cp_matrix = cp.eval_cp()
+    qs_vec = cp.quasi_stability(cp_matrix)
+    deg_gini = cp.deg_gini()
+    # Save the Degree gini data as a csv file
+    np.savetxt(os.path.join(expt_dir,"deg_gini.csv"),
+                  deg_gini, delimiter=",")
+    plt.plot(deg_gini, qs_vec, 'rx')
+    plt.xlabel('SN Degree Gini Coefficient')
+    plt.ylabel('Quasi-Stability (changes per tick)')
+    plt.savefig(os.path.join(expt_dir,'deg_gini_tir.eps'))
+    plt.show()
+    
+
+def plot_ring(size=10):
+    """Generates a ring network of the specified size using
+    SimDemopolis, and plots it."""
+    plt.figure(1, figsize=[4.0,3.0])
+    nx_dict = gen_socnet('ring', size)
+    plot_graph(nx_dict, os.path.join('Network-Plots','ring.eps'), circle=True)
+
+def plot_k_ring(size=10):
+    """Generates a k-ring network of the specified size using
+    SimDemopolis, and plots it."""
+    plt.figure(1, figsize=[6.0,4.0])
+    nx_dict = gen_socnet('small_world', size, prob=0.0, k=2)
+    plot_graph(nx_dict, os.path.join('Network-Plots','k_ring.eps'), circle=True)
+
+def plot_small_world(size=10):
+    """Generates a small-world network of the specified size using
+    SimDemopolis, and plots it."""
+    plt.figure(1, figsize=[11.0,4.0])
+    betas = [0.0, 0.25, 0.5, 1.0]
+    for i,beta in enumerate(betas):
+        ax = plt.subplot(1, len(betas), i+1)
+        nx_dict = gen_socnet('small_world', size, prob=beta, k=2)
+        plot_graph(nx_dict,
+                   os.path.join('Network-Plots','small_world.eps'),
+                   ax=ax, circle=True, show=False,
+                   title=r'$\beta={}$'.format(beta))
+    plt.show()
+
+def plot_random(size=10):
+    """Generates a random network of the specified size using
+    SimDemopolis, and plots it."""
+    plt.figure(1, figsize=[11.0,4.0])
+    p_list = [0.25, 0.5, 1.0]
+    for i,p in enumerate(p_list):
+        ax = plt.subplot(1, len(p_list), i+1)
+        nx_dict = gen_socnet('random', size, prob=p, k=2)
+        plot_graph(nx_dict,
+                   os.path.join('Network-Plots','random.eps'),
+                   ax=ax, circle=True, show=False,
+                   title=r'$p={}$'.format(p))
+    plt.show()
+
+def plot_scale_free(size=20):
+    """Generates a scale-free network of the specified size using
+    SimDemopolis, and plots it."""
+    plt.figure(1, figsize=[20.0,10.0])
+    ax = plt.gca()
+    nx_dict = gen_socnet('scale_free2', size)
+    plot_graph(nx_dict, os.path.join('Network-Plots','scale_free3.eps'), ax=ax,
+               kamada_kawai=True)
+
+def plot_scale_free_growth():
+    """Generates and plots a scale-free networks of a range of sizes using 
+    SimDemopolis, to illustrate the growth of these networks.
+    """
+    size_list = range(1,9)
+    plt.figure(1, figsize=[20.0,10.0])
+    for i,size in enumerate(size_list):
+        ax = plt.subplot(2, len(size_list)/2, i+1)
+        nx_dict = gen_socnet('scale_free', size)
+        plot_graph(nx_dict,
+                   os.path.join('Network-Plots','scale_free_growth.eps'),
+                   ax=ax, show=False, title=r'$N={}$'.format(size), 
+                   kamada_kawai=True)                  
+    plt.show()
+
+# -----------------------------------------------------------------------------
+# Run and plot experiment results shown in the report
+# -----------------------------------------------------------------------------
+
+# Civic participation experiment, with size as the independent variable
+def cp_size(socnet_top, size_list):
+    root_dir = os.path.join('Civic-Participation','size',socnet_top)
+    try:
+        cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
+                                prob=0.25, indep_var='size', root_dir=root_dir)
+        cp.plot_range(rounds=20, ticks=40, load=False)
+    except AssertionError as error:
+        print('Civic participation size experiment failed')
+        print(error)
+
+def cp_prob(socnet_top, prob_list):
+    root_dir = os.path.join('Civic-Participation',
+                            'probability', socnet_top)
+    try:
+        cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
+                                prob=prob_list, indep_var='probability', 
+                                root_dir=root_dir)
+        cp.plot_range(rounds=20, ticks=40, load=False)
+    except AssertionError as error:
+        print('Civic participation probability experiment failed')
+        print(error)
+
+def cp_k(k_list):
+    # the k parameter only applies to small-world networks
+    socnet_top = 'small_world1' 
+    root_dir = os.path.join('Civic-Participation', 'k', socnet_top)
+                            
+    try:
+        cp = CivicParticipation(socnet_top, dir_reset=True, size=30, prob=0.25,
+                                indep_var='k', k=k_list, root_dir=root_dir)                                
+        cp.plot_range(rounds=20, ticks=40, load=False)
+    except AssertionError as error:
+        print('Civic participation small-world k experiment failed')
+        print(error)
+        
+def cp_m(m_list):
+    # the m parameter only applies to scale-free networks
+    socnet_top = 'scale_free2' 
+    root_dir = os.path.join('Civic-Participation', 'm', socnet_top)
+    
+    try:
+        cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
+                                indep_var='m', m=m_list, root_dir=root_dir)                                
+        cp.plot_range(rounds=20, ticks=40, load=False)
+    except AssertionError as error:
+        print('Civic participation scale-free m experiment failed')
+        print(error)
+        
+# -----------------------------------------------------------------------------
+# Test code (for development)
+# -----------------------------------------------------------------------------
+def test_parse():
+    """
+    Test the text parsing functionality from a samle SimDemopolis output from 
+    a file
+    """
+    with open('Development/test_output.txt') as f:
+        test_str = f.read()
+        test_dict = pp2dict(test_str)
+    with open('Development/test_json.json', 'w') as f:
+        json.dump(test_dict, f)
+    return test_dict
+
+def create_test_output():
+    """
+    Write sample SimDemopolis output to file (for debugging)
+    """
+    (stdout, stderr) = simDemopolis(False, 0)
+    with open('Development/test_output.txt', 'w') as f:
+        f.write(stdout)
+    print(stderr)
+
+def test_graph():
+    cp = CivicParticipation()
+    cp.load_result()
+    sd_dict = cp.result[0]
+    nx_dict = sd2nx(sd_dict)
+    agent_list, sn_list = nx2sd(nx_dict)
+    
+def test_size_plot_range():
+    socnet_top='scale_free1'
+    root_dir = os.path.join('Civic-Participation','Test-Size',socnet_top)
+    size_list = [7,10,10]
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
+                            prob=0.25, indep_var='size', root_dir=root_dir)
+    cp.plot_range(rounds=10, ticks=5)
+    
+def test_prob_plot_range():
+    socnet_top='small_world1'
+    root_dir = os.path.join('Civic-Participation','Test-Prob',socnet_top)
+    prob_list = [0.25, 0.5, 0.75]
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7,
+                            prob=prob_list, indep_var='probability', root_dir=root_dir)
+    cp.plot_range(rounds=10, ticks=3)
+    
+def test_k_plot_range():
+    socnet_top='small_world1'
+    root_dir = os.path.join('Civic-Participation','Test-k',socnet_top)
+    k_list = [1,2, 3, 4]
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, prob=0.25, 
+                            k=k_list, indep_var='k', root_dir=root_dir)
+    cp.plot_range(rounds=10, ticks=3)
+
+def test_m_plot_range():
+    socnet_top='scale_free1'
+    root_dir = os.path.join('Civic-Participation','Test-m',socnet_top)
+    m_list = [1, 2]
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, m=m_list, 
+                            indep_var='m', root_dir=root_dir)                        
+    cp.plot_range(rounds=10, ticks=3)
+    
 if __name__ == "__main__":
     cp_size('scale_free2', [20,30,40])
     #cp_prob('random1',[0.25, 0.5, 0.75, 1.0])
@@ -1337,3 +1587,4 @@ if __name__ == "__main__":
     #sk_prob('small_world1', [0.25,0.5,0.75])
     #test_sk_m_plot_range()
     #create_test_output()
+
