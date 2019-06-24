@@ -1,6 +1,8 @@
-'''
+"""
+run.py
+=============================================================
 Automatically run SimDemopolis, parse the output, analyse and plot the data.
-'''
+"""
 
 import os
 import shutil
@@ -475,7 +477,7 @@ class Experiment():
             if not load: # generate new results
                 # Run SimDemopolis
                 stdout, stderr = simDemopolis(False, ticks, self.socnet_top, size, 
-                                              prob, k, m)
+                                              prob, k, m, self.has_skiver)
                 # Check SimDemopolis returned output
                 assert(stdout is not None), "SimDemopolis returned no output" 
                 
@@ -687,9 +689,18 @@ class Experiment():
         for i in range(len(tir_list)):
             deg_gini[i] = gini(tir_list[i][:,1])
         return deg_gini
+    
+    def print_info(self):
+        print(f"Social Network Topology = {self.socnet_top}")
+        print(f"Network Size = {self.size}")
+        print(f"Independent Variable = {self.indep_var}")
+        if self.has_skiver: 
+            print("Skiver Active")
+        else:
+            print("No Skiver")
         
     def __init__(self, socnet_top, root_dir, dir_reset=True, size=5, prob=0.25,
-                 indep_var='', k=2, m=2):
+                 indep_var='', k=2, m=2, has_skiver=False):
         """Object properties are initialized
         
         Parameters
@@ -734,13 +745,14 @@ class Experiment():
         self.socnet_top = socnet_top
         self.k = k
         self.m = m
+        self.has_skiver = has_skiver
 
 class Skiver(Experiment):
     def plot(self, filename, show=True, ax=None, title=""):
         save_fig = False # Save figure if set of axes not provided
         if not ax:
             fig, ax = plt.subplots()
-            save_fig = True
+            save_fig = True 
         
         time_in_role = self.get_time_in_role()
         ax.boxplot(time_in_role, vert=False)
@@ -763,7 +775,7 @@ class Skiver(Experiment):
 
     def __init__(self, socnet_top='random', root_dir='Skiver',
                  dir_reset=True, size=5, prob=0.25,
-                 indep_var='', k=2, m=1):
+                 indep_var='', k=2, m=1, has_skiver=False):
         """Object properties are initialized, by creating an object of the 
         subclass (Experiment)
         
@@ -800,7 +812,7 @@ class Skiver(Experiment):
             'probability', 'k', 'm'.
         """
         super().__init__(socnet_top, root_dir, dir_reset, size, prob,
-             indep_var, k, m)
+             indep_var, k, m, has_skiver)
 
 class CivicParticipation(Experiment):
     def eval_cp(self):
@@ -920,7 +932,8 @@ class CivicParticipation(Experiment):
 # -----------------------------------------------------------------------------
 
 def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
-                 prob=0.25, k=2, m=1, stack_limit='100g', table_space='50g'):
+                 prob=0.25, k=2, m=1, has_skiver=False, stack_limit='100g', 
+                 table_space='50g'):
     """
     Run the SimDemopolis Prolog Queries, and return the stdout and stderr text
     
@@ -968,12 +981,17 @@ def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
     if not interactive:
         halt = "-t halt "
         
+    if has_skiver: # Prolog doesn't capitalize True or False
+        has_skiver_str = 'true'
+    else:
+        has_skiver_str = 'false'
+        
     # Command-line script which runs constructs SimDemopolis in SWI-Prolog, 
     # then runs the main query, run afterwards.
     sim_script = "swipl --stack_limit={} --table_space={} -s main.pl -g run {} \
     --socnet {} --agent_num {} --probability {} --small_world_connections {} \
-    --scale_free_links {} --ticks {}".format(stack_limit, table_space, halt, 
-    socnet_top, size, prob, k, m, ticks)
+    --scale_free_links {} --skiver {} --ticks {}".format(stack_limit, table_space, halt, 
+    socnet_top, size, prob, k, m, has_skiver_str, ticks)
     Output = subprocess.run(shlex.split(sim_script),
                             text=True,
                             shell=True,
@@ -987,12 +1005,12 @@ def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
 def plot_sn_growth(net_top, size, prob=0.25, k=2):
     nx_dict = gen_socnet(net_top, size, prob, k)
     
-def plot_qs_clustering(socnet_top='random1', subdir='expt1'):
+def plot_qs_clustering(socnet_top='random1', indep_var='m', subdir='expt1'):
     """Plots a graph of quasi-stability against the local clustering 
     coefficient, based on a previously-run experiment. Quasi stability is 
     defined as the number of times the voting state changes divided by the 
     number of experiment rounds."""
-    expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
+    expt_dir = os.path.join('Civic-Participation', indep_var, socnet_top, subdir,
                             'Rounds')
     cp = CivicParticipation(socnet_top, expt_dir, False)
     cp.load_result()
@@ -1035,8 +1053,8 @@ def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
     plt.savefig(img_path)
     plt.show()
     
-def plot_deggini_tir(socnet_top='scale_free1', subdir='expt1'):
-    expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
+def plot_deggini_tir(socnet_top='scale_free1', indep_var='m', subdir='expt1'):
+    expt_dir = os.path.join('Civic-Participation', indep_var, socnet_top, subdir,
                             'Rounds')
     cp = CivicParticipation(socnet_top, expt_dir, False)
     cp.load_result()
@@ -1052,6 +1070,15 @@ def plot_deggini_tir(socnet_top='scale_free1', subdir='expt1'):
     plt.savefig(os.path.join(expt_dir,'deg_gini_tir.eps'))
     plt.show()
     
+def get_stats(indep_var, socnet_top='scale_free1', subdir='expt1'):
+    print(socnet_top)
+    print(subdir)
+    plot_qs_clustering(socnet_top, indep_var, subdir)
+    plot_deggini_tir(socnet_top, indep_var, subdir)
+    cqc = cluster_qs_corr(indep_var, socnet_top, subdir)
+    print(f"Corr(QS, Clustering) = {cqc}")
+    dqc = deg_gini_qs_corr(indep_var, socnet_top, subdir)
+    print(f"Corr(Gini(K), QS) = {dqc}")
 
 def plot_ring(size=10):
     """Generates a ring network of the specified size using
@@ -1128,7 +1155,7 @@ def cp_size(socnet_top, size_list):
     root_dir = os.path.join('Civic-Participation','size',socnet_top)
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
-                                prob=0.25, indep_var='size', root_dir=root_dir)
+                                prob=0.25, m=2, indep_var='size', root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation size experiment failed')
@@ -1146,13 +1173,13 @@ def cp_prob(socnet_top, prob_list):
         print('Civic participation probability experiment failed')
         print(error)
         
-def sk_prob(socnet_top, prob_list):
+def sk_prob(socnet_top, prob_list, has_skiver=False):
     root_dir = os.path.join('Skiver',
                             'probability', socnet_top)
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30,
                                 prob=prob_list, indep_var='probability', 
-                                root_dir=root_dir)
+                                root_dir=root_dir, has_skiver=has_skiver)
         sk.plot_range(rounds=10, ticks=40, load=False)
     except AssertionError as error:
         print('Skiver probability experiment failed')
@@ -1171,14 +1198,14 @@ def cp_k(k_list):
         print('Civic participation small-world k experiment failed')
         print(error)
         
-def sk_k(k_list):
+def sk_k(k_list, has_skiver=False):
     # the k parameter only applies to small-world networks
     socnet_top = 'small_world1' 
     root_dir = os.path.join('Skiver', 'k', socnet_top)
                             
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30, prob=0.25,
-                                indep_var='k', k=k_list, root_dir=root_dir)                                
+                                indep_var='k', k=k_list, root_dir=root_dir, has_skiver=has_skiver,)                                
         sk.plot_range(rounds=10, ticks=40, load=False)
     except AssertionError as error:
         print('Skiver small-world k experiment failed')
@@ -1198,14 +1225,18 @@ def cp_m(m_list):
         print(error)
         
         
-def sk_m(m_list):
+def sk_m(m_list, has_skiver=False):
     # the m parameter only applies to scale-free networks
-    socnet_top = 'scale_free1' 
-    root_dir = os.path.join('Skiver', 'm', socnet_top)
+    socnet_top = 'scale_free' 
+    if has_skiver:
+        dir_str = 'With-Skiver'
+    else:
+        dir_str = 'Without-Skiver'
+    root_dir = os.path.join('Skiver', dir_str, 'm', socnet_top)
     
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30,
-                                indep_var='m', m=m_list, root_dir=root_dir)                                
+                                indep_var='m', m=m_list, root_dir=root_dir, has_skiver=has_skiver)                                
         sk.plot_range(rounds=10, ticks=40, load=False)
     except AssertionError as error:
         print('Skiver scale-free m experiment failed')
@@ -1294,14 +1325,15 @@ def test_sk_m_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Skiver','Test-m',socnet_top)
     m_list = [1, 2]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, m=m_list, 
-                            indep_var='m', root_dir=root_dir)                        
+    cp = Skiver(socnet_top, dir_reset=True, size=7, m=m_list, 
+                            indep_var='m', root_dir=root_dir, has_skiver=True)                        
     cp.plot_range(rounds=10, ticks=3)
 
 if __name__ == "__main__":
-    # cp_size('small_world1', [20,30,40])
+    cp_size('scale_free2', [20,30,40])
     #cp_prob('random1',[0.25, 0.5, 0.75, 1.0])
-    sk_m([1,2,3,5])
-    sk_prob('random1', [0.25,0.5,0.75])
+    #sk_m([1,2,3,5], True)
+    #sk_prob('random1', [0.25,0.5,0.75])
+    #sk_prob('small_world1', [0.25,0.5,0.75])
     #test_sk_m_plot_range()
     #create_test_output()

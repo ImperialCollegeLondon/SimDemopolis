@@ -6,6 +6,9 @@
 Welcome to SimDemopolis's documentation!
 ========================================
 
+.. automodule:: run
+    :members:
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

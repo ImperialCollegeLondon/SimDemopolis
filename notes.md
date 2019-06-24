@@ -8,7 +8,6 @@
 
 ## TODO
 - Have a look to see what exactly the _Gini Index_ is.
-- Have a look at how best to write a really good literature survey
 - Re-read _Demopolis_, and make sure I've covered all the main points 
 in the report
 - Read _Democracy and Knowledge_ (preferably quite quickly)
@@ -20,16 +19,6 @@ in the report
 - See if there is a way of modularizing the code (in a similar way one would do with object-oriented code)
 - Explain SimDempolis code in detail
 - Dynamics (of network)
-
-### Interim Report
-- Finish the introduction
-- Write the stuff on random networks
-- Write the stuff on scale-free networks
-- Write the stuff on small-world networks
-- Get the bibliography working
-
-## Done
-- Read the relevant parts of Demopolis
 
 ## General Notes
 - The Small-World effect is very common in real-world social networks (the 
@@ -60,9 +49,6 @@ re-creating Demopolis in a different programming language be a better idea?
 - Network is a random graph G = <A,p>, where A is the set of agents, and p is the probability of a link between any two members of A.
 
 ### Small-World Network (Watts-Strogatz Model)
-- Problem - Needs to start with a ring network and then randomly re-arrange itself. How to implement this 2-stage process in Prolog?
+
 
 ## General Implementation Notes
-- When reading stuff, take notes. It may slow reading down significantly, 
-but reduces the need to go back and re-read stuff later
-- While I'm going along, and after O
