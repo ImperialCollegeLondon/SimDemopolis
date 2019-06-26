@@ -1,6 +1,6 @@
 """
 run.py
-=============================================================
+======
 Automatically run SimDemopolis, parse the output, analyse and plot the data.
 """
 
@@ -50,20 +50,20 @@ def parse_pairs(inst_str):
     return output_str
 
 def parse_dict(inst_str):
-    """ If a string begins with a "key: value" format, return the key and parsed 
+    """ If a string begins with a "key: value" format, return the key and parsed
     value as a tuple, for insertion into a dictionary.
     """
     head, tail = splice_atom(inst_str)
     return head, parse_term(tail[1:])[0]
 
 def parse_term(word):
-    """Parses a term at the beginning of a string, and detmines the 
+    """Parses a term at the beginning of a string, and detmines the
     type of the term, parsing as neccessary.
-    
+
     Returns
     -------
     (term, rest)
-        Parsed term from the beginning of a list, and the rest as a string. 
+        Parsed term from the beginning of a list, and the rest as a string.
         This can either be a list or a string.
     """
     word = word.strip()
@@ -99,13 +99,13 @@ def is_pointer(head, tail):
 
 # atom pointing to a term
 def parse_dict2(key, val):
-    """If a string begins with an atom pointing to another term (key^^val), 
+    """If a string begins with an atom pointing to another term (key^^val),
     convert the key^^val to a dictionary. val can either be an atom or a list.
-    
+
     Returns
     -------
     (output, rest) : (dictionary, string)
-        The parsed beginning of the string as a dictionary, and the rest as a 
+        The parsed beginning of the string as a dictionary, and the rest as a
         string.
     """
     output = {}
@@ -123,11 +123,11 @@ def parse_dict2(key, val):
 
 def parse_list(list_str):
     """ Parses the list at the beginning of a string.
-    
+
     Returns
     -------
     (output, rest) : (list, string)
-        The parsed beginning of the string as a list, and the rest as a string.    
+        The parsed beginning of the string as a list, and the rest as a string.
     """
     # Remove opening '['
     list_str = list_str[1:]
@@ -154,8 +154,8 @@ def parse_list(list_str):
 
 def splice_atom(in_str):
     """Removes the atom at the beginning of a string
-    
-    :returns (head,tail): The atom at the beginning of in_str as a string and the 
+
+    :returns (head,tail): The atom at the beginning of in_str as a string and the
     rest as a string
     :rtype: tuple"""
     word_regex = re.compile(r'([a-zA-Z0-9_\.\+-]*)')
@@ -164,7 +164,7 @@ def splice_atom(in_str):
     return (head, tail)
 
 def has_voted(pp_str):
-    """Checks the SimDemopolis output to see if a vote to trigger the role 
+    """Checks the SimDemopolis output to see if a vote to trigger the role
     assignment has taken place
     :rtype: bool"""
     voted_match = re.search(r'ra_vote: ((?:True)|(?:False))', pp_str)
@@ -174,15 +174,15 @@ def has_voted(pp_str):
         return False
 
 def pp2dict(pp_str):
-    """Converts the pretty-printed output of SimDemopolis into a Python 
-    dictionary. Generally use this in other functions - the functions above 
+    """Converts the pretty-printed output of SimDemopolis into a Python
+    dictionary. Generally use this in other functions - the functions above
     are largely helper functions for this.
-    
+
     Parameters
     ----------
-    pp_str : string 
+    pp_str : string
         The pretty-printed output of SimDemopolis.
-    
+
     Returns
     -------
     dictionary
@@ -233,24 +233,24 @@ def pp2dict(pp_str):
 
 def plot_graph(sn_dict, file_name='', ax=None, title="", show=True,
                circle=False, figure=1, close=False, kamada_kawai=False):
-    """Converts a dictionary (JSON) in the nx documentation) in an nx node-link 
+    """Converts a dictionary (JSON) in the nx documentation) in an nx node-link
     format into an nx graph, then plots this graph using MatPlotLib.
 
 Parameters
     ----------
-    sn_dict : dictionary 
+    sn_dict : dictionary
         The social network to be plotted, in a NetworkX dictionary
-        (JSON) node-link format.    
+        (JSON) node-link format.
     file_name : string
-        The name of the file to save the graph in. If not 
+        The name of the file to save the graph in. If not
         specified, the graph is not saved.
-    ax : matplotlib.pyplot.axes.Axes 
+    ax : matplotlib.pyplot.axes.Axes
         The set of axes to draw the graph on. If not specified, a new
-        figure and axes are created.    
-    title : string 
+        figure and axes are created.
+    title : string
         The title to display on the graph.
     show : bool
-        Determines if the graph is displayed after plotting. (default is False)    
+        Determines if the graph is displayed after plotting. (default is False)
     figure : int
         The figure number to plot the graph in. (default is 1)
     close : bool
@@ -259,7 +259,7 @@ Parameters
         Plots the graph in a circular format. (default is False)
     kamada_kawai : bool
         Plots the graph using the Kamada-Kawai force-directed algorithm. This
-        is particularly useful for graphs with hubs, such as scale-free 
+        is particularly useful for graphs with hubs, such as scale-free
         networks. Here, the size of the nodes in the plot scale with their
         degree. (default is False)
     """
@@ -334,11 +334,11 @@ def nx2sd(nx_dict):
 
 def gini(x):
     # code from https://stackoverflow.com/questions/39512260/calculating-gini-coefficient-in-python-numpy
-    
+
     # (Warning: This is a concise implementation, but it is O(n**2)
     # in time and memory, where n = len(x).  *Don't* pass in huge
     # samples!)
-    
+
     # Mean absolute difference
     mad = np.abs(np.subtract.outer(x, x)).mean()
     # Relative mean absolute difference
@@ -348,37 +348,37 @@ def gini(x):
     return g
 
 def cluster_qs_corr(indep_var, socnet_top, subdir):
-    dir_path = os.path.join('Civic-Participation', indep_var, 
+    dir_path = os.path.join('Civic-Participation', indep_var,
                              socnet_top, subdir, 'Rounds')
     clustering = np.loadtxt(open(
-                    os.path.join(dir_path, 'clustering.csv'), "rb"), 
+                    os.path.join(dir_path, 'clustering.csv'), "rb"),
                     delimiter=",")
     qs = np.loadtxt(open(
-                    os.path.join(dir_path, 'quasi_stability.csv'), "rb"), 
+                    os.path.join(dir_path, 'quasi_stability.csv'), "rb"),
                     delimiter=",")
     qs_clustering = np.vstack((clustering, qs))
-    np.savetxt(os.path.join(dir_path, 'qs_clustering.csv'), qs_clustering,  
+    np.savetxt(os.path.join(dir_path, 'qs_clustering.csv'), qs_clustering,
                     delimiter=",")
     corr = np.corrcoef(clustering, qs)[0,1]
     print('Correlation = {}'.format(corr))
     return corr
 
 def deg_gini_qs_corr(indep_var, socnet_top, subdir):
-    dir_path = os.path.join('Civic-Participation', indep_var, 
+    dir_path = os.path.join('Civic-Participation', indep_var,
                              socnet_top, subdir, 'Rounds')
     deg_gini = np.loadtxt(open(
-                    os.path.join(dir_path, 'deg_gini.csv'), "rb"), 
+                    os.path.join(dir_path, 'deg_gini.csv'), "rb"),
                     delimiter=",")
     qs = np.loadtxt(open(
-                    os.path.join(dir_path, 'quasi_stability.csv'), "rb"), 
+                    os.path.join(dir_path, 'quasi_stability.csv'), "rb"),
                     delimiter=",")
     deg_gini_qs = np.vstack((deg_gini, qs))
-    np.savetxt(os.path.join(dir_path, 'deg_gini_qs.csv'), deg_gini_qs,  
+    np.savetxt(os.path.join(dir_path, 'deg_gini_qs.csv'), deg_gini_qs,
                     delimiter=",")
     corr = np.corrcoef(deg_gini, qs)[0,1]
     print('Correlation = {}'.format(corr))
     return corr
-            
+
 # -----------------------------------------------------------------------------
 # Code to run the experiments
 # -----------------------------------------------------------------------------
@@ -406,7 +406,7 @@ class Experiment():
     def load_result(self, file_name=''):
         """
         Loads results for previous experiment from file. Allows results to be
-        analyzed without running SimDemopolis again. The loaded results are 
+        analyzed without running SimDemopolis again. The loaded results are
         stored in the Experiment object calling this method.
 
         Parameters
@@ -419,47 +419,47 @@ class Experiment():
             file_name = os.path.join(self.root_dir, 'full_result.json')
         with open(file_name) as f:
             self.result = json.load(f)
-            
+
     """def load_all_results(self):
         self.experiments = []
         for inner_dir in os.list_dir(self.root_dir):
             if inner_dir.search('expt'):
-                result_path = os.path.join(self.root_dir, inner_dir, 'Rounds', 
+                result_path = os.path.join(self.root_dir, inner_dir, 'Rounds',
                                           'full_result.json')
                 with open(result_path) as f:
                     result_json = json.load(f)
                     self.experiments.append(result_json)"""
-                    
-                    
-    def run(self, rounds, ticks=10, subdir='Rounds', size=5, prob=0.25, k=2, 
+
+
+    def run(self, rounds, ticks=10, subdir='Rounds', size=5, prob=0.25, k=2,
             m=1, load=False):
-        """Runs the SimDemopolis program a specified number of times with 
+        """Runs the SimDemopolis program a specified number of times with
         the set parameters, saves the results, plots the social network graphs,
         and appends the result to the result property of the calling  Experiment
         object The results can be loaded from files if the experiment has been
         run previously.
-        
+
         Parameters
         ----------
         rounds : int
-            Number of rounds in the experiment (the number of times 
+            Number of rounds in the experiment (the number of times
             SimDemopolis is run).
         ticks : int
             Number of ticks (time units) in each round. (default is 10)
         subdir : string
-            Subdirectory of the experiment root to save the results in. 
+            Subdirectory of the experiment root to save the results in.
             (default is 'Rounds')
         size : int
             Size of the SimDemopolis social network. (default is 5)
         prob : float
-            Probability that a link is made for a random network, or 
+            Probability that a link is made for a random network, or
             probability a link is assigned for a small-world network. Does not
             apply to other networks.
         k : int
-            Average connectivity of a small_world network. Has no effect on 
+            Average connectivity of a small_world network. Has no effect on
             other networks (default is 2)
         m : int
-            Number of links per new node for a scale-free network. Has no 
+            Number of links per new node for a scale-free network. Has no
             effect on other networks (default is 1)
         load: bool
             Load previous results from file rather than generate them from
@@ -469,20 +469,20 @@ class Experiment():
 
         for round_num in range(rounds):
             print('Beginning round {}'.format(round_num))
-            
+
             round_path = os.path.join(self.root_dir, subdir, str(round_num))
             os.makedirs(round_path, exist_ok=True)
-            
+
             if not load: # generate new results
                 # Run SimDemopolis
-                stdout, stderr = simDemopolis(False, ticks, self.socnet_top, size, 
+                stdout, stderr = simDemopolis(False, ticks, self.socnet_top, size,
                                               prob, k, m, self.has_skiver)
                 # Check SimDemopolis returned output
-                assert(stdout is not None), "SimDemopolis returned no output" 
-                
+                assert(stdout is not None), "SimDemopolis returned no output"
+
                 with open(os.path.join(round_path, 'raw_output.txt'), 'w') as f:
                     f.write(stdout)
-                    
+
                 # Carry on experiment if SimDemopolis fails - continue to next
                 # round
                 if stderr.find('ERROR:') != -1:
@@ -496,7 +496,7 @@ class Experiment():
                 if 'error_log.txt' in os.listdir(round_path):
                     print('Error in round {}: see log for details'.format(round_num))
                     continue
-                
+
             print('Round {} complete'.format(round_num))
 
             # Convert the SimDemopolis output to a dictionary
@@ -513,20 +513,20 @@ class Experiment():
         with open(os.path.join(self.root_dir, subdir, 'full_result.json'), 'w') as f:
             json.dump(expt_result, f)
         self.result =  expt_result
-        
+
     def plot(self):
         """
         Skleleton function to plot experiment output. Subclass this to add
         the functionality.
         """
         pass
-        
+
     def plot_range(self, rounds=10, ticks=1, load=False):
         """Run and plot a range of experiments in subplots on the same figure,
         modifying an independent variable determined by the indep_var property
         of the calling Experiment object. The graph is saved in the 'Rounds'
         subdirectory of the experiment root.
-        
+
         Parameters
         ----------
         rounds : int
@@ -534,11 +534,11 @@ class Experiment():
         ticks : int
             Number of ticks (time units) per round. (default is 1)
         load : bool
-            Load previous experiment results from files, rather than run the 
+            Load previous experiment results from files, rather than run the
             experiment again. (default is False)
         """
         print('Beginning Experiment Set\n')
-        
+
         print('Independent variable = {}'.format(self.indep_var))
         print('Socal network topology = {}'.format(self.socnet_top))
         var_list = []
@@ -551,7 +551,7 @@ class Experiment():
         elif self.indep_var == 'm':
             var_list = self.m
 
-        # Plot height is proportional to the number of rounds, plus extra for 
+        # Plot height is proportional to the number of rounds, plus extra for
         # the titles and labels
         plot_height = (0.1*rounds+0.3)*len(var_list)
         plt.figure(1, figsize=[11.0,plot_height])
@@ -560,7 +560,7 @@ class Experiment():
             self.root_dir = os.path.join(self.root_dir, "expt{}".format(i+1))
             print('Beginning experiment {}'.format(i+1))
             print('{} = {}\n'.format(self.indep_var, var))
-            
+
             size = self.size
             prob = self.prob
             k = self.k
@@ -604,24 +604,24 @@ class Experiment():
         plt.tight_layout()
         plt.savefig(os.path.join(self.root_dir,'result.eps'))
         plt.show() # note: this changes the active figure
-        
+
     def quasi_stability(self, cp_matrix):
-        """Calculate the quasi stability of each round of a role-assignment 
+        """Calculate the quasi stability of each round of a role-assignment
         experiment. This is equal to the number of changes in whether a vote
         is taking place, divided by the number of rounds.
-        
+
         Parameters
         ----------
         cp_matrix : numpy.ndarray
-            2D NumPy array containing the values of whether a vote has taken 
-            place (either 1 or zero) for each tick of each round of the 
-            experiment. The rounds are in the 1st dimension, and the ticks are 
+            2D NumPy array containing the values of whether a vote has taken
+            place (either 1 or zero) for each tick of each round of the
+            experiment. The rounds are in the 1st dimension, and the ticks are
             in the 2nd dimension.
-            
+
         Returns
         -------
         qs_vector : numpy.ndarray
-            1D NumPy array containing the quasi-stability values for each 
+            1D NumPy array containing the quasi-stability values for each
             round. These are floats between 0 and 1.
         """
         num_rounds = cp_matrix.shape[0]
@@ -636,16 +636,16 @@ class Experiment():
                     num_changes = num_changes + 1
             qs_vector[expt_round] = num_changes/num_ticks
         return qs_vector
-    
+
     def clustering(self):
         """Calculate the local clustering coefficients of the social networks of
         each round of the experiment, from the result property of the caller
         object. A graph is creating for this purpose within the function.
-        
+
         Return
         ------
         c : numpy.ndarray
-            1D NumPy array containing the clustering coefficients of each 
+            1D NumPy array containing the clustering coefficients of each
             round of the experiment.
         """
         num_rounds = len(self.result)
@@ -655,8 +655,8 @@ class Experiment():
             G = nx.json_graph.node_link_graph(nx_dict, False, False)
             c[i] = nx.transitivity(G)
         return c
-    
-    def degree_time_in_role(self):   
+
+    def degree_time_in_role(self):
         """Calulate the social network degree and time in role of each agent
         in SimDemopolis
         """
@@ -681,35 +681,35 @@ class Experiment():
                 degree_tir_vec[i, 1] = agent_tir
             output_list.append(degree_tir_vec)
         return output_list
-    
+
     def deg_gini(self):
         tir_list = self.degree_time_in_role()
         deg_gini = np.zeros(len(tir_list))
         for i in range(len(tir_list)):
             deg_gini[i] = gini(tir_list[i][:,1])
         return deg_gini
-    
+
     def print_info(self):
         print(f"Social Network Topology = {self.socnet_top}")
         print(f"Network Size = {self.size}")
         print(f"Independent Variable = {self.indep_var}")
-        if self.has_skiver: 
+        if self.has_skiver:
             print("Skiver Active")
         else:
             print("No Skiver")
-        
+
     def __init__(self, socnet_top, root_dir, dir_reset=True, size=5, prob=0.25,
                  indep_var='', k=2, m=2, has_skiver=False):
         """Object properties are initialized
-        
+
         Parameters
         ----------
         socnet_top : string
             Social network topology being investigated in the experiment. This
             must be one of 'ring', 'scale_free1', 'random1' or 'small_world1'.
             The 1 at the end of the names is because there are 2 versions of
-            the social network gernerating algorithms in SimDemopolis. The 
-            versions used here ensure that all nodes have at least one link. 
+            the social network gernerating algorithms in SimDemopolis. The
+            versions used here ensure that all nodes have at least one link.
             Whilst this makes the networks mathmatically imperfect, it prevents
             a divide-by-zero error in SimDemopolis.
         root_dir : string
@@ -718,12 +718,12 @@ class Experiment():
             If enabled, the self.reset_dir() method is run, clearing the root
             directory of previous results. (default is False)
         size : int
-            Size of the social network (number of nodes). (default is 5). If 
+            Size of the social network (number of nodes). (default is 5). If
             size is the independent variable, this should be a list of ints.
         prob : float
             Probability of link formation for a random network, or probability
             of link reassignment for a small-world network. If probability is
-            the independent variable, this should be a list of floats.       
+            the independent variable, this should be a list of floats.
         k : int
             Average degree for a small-world network. If k is the independent
             variable, this should be a list of ints.
@@ -731,7 +731,7 @@ class Experiment():
             Number of links added per new node for a scale-free network. If m
             is the independent variable, this should be a list of ints.
         indep_var : string
-            Independent variable in the experiment. Must be one of 'size', 
+            Independent variable in the experiment. Must be one of 'size',
             'probability', 'k', 'm'.
         """
         self.result = []
@@ -751,8 +751,8 @@ class Skiver(Experiment):
         save_fig = False # Save figure if set of axes not provided
         if not ax:
             fig, ax = plt.subplots()
-            save_fig = True 
-        
+            save_fig = True
+
         time_in_role = self.get_time_in_role()
         ax.boxplot(time_in_role, vert=False)
         ax.set_ylabel('Round Number')
@@ -761,7 +761,7 @@ class Skiver(Experiment):
             plt.show()
         if save_fig and filename:
             plt.savefig(filename)
-        
+
     def get_time_in_role(self):
         expt_result = self.result
         output = []
@@ -775,17 +775,17 @@ class Skiver(Experiment):
     def __init__(self, socnet_top='random', root_dir='Skiver',
                  dir_reset=True, size=5, prob=0.25,
                  indep_var='', k=2, m=1, has_skiver=False):
-        """Object properties are initialized, by creating an object of the 
+        """Object properties are initialized, by creating an object of the
         subclass (Experiment)
-        
+
         Parameters
         ----------
         socnet_top : string
             Social network topology being investigated in the experiment. This
             must be one of 'ring', 'scale_free1', 'random1' or 'small_world1'.
             The 1 at the end of the names is because there are 2 versions of
-            the social network gernerating algorithms in SimDemopolis. The 
-            versions used here ensure that all nodes have at least one link. 
+            the social network gernerating algorithms in SimDemopolis. The
+            versions used here ensure that all nodes have at least one link.
             Whilst this makes the networks mathmatically imperfect, it prevents
             a divide-by-zero error in SimDemopolis.
         root_dir : string
@@ -794,12 +794,12 @@ class Skiver(Experiment):
             If enabled, the self.reset_dir() method is run, clearing the root
             directory of previous results. (default is False)
         size : int
-            Size of the social network (number of nodes). (default is 5). If 
+            Size of the social network (number of nodes). (default is 5). If
             size is the independent variable, this should be a list of ints.
         prob : float
             Probability of link formation for a random network, or probability
             of link reassignment for a small-world network. If probability is
-            the independent variable, this should be a list of floats.       
+            the independent variable, this should be a list of floats.
         k : int
             Average degree for a small-world network. If k is the independent
             variable, this should be a list of ints.
@@ -807,7 +807,7 @@ class Skiver(Experiment):
             Number of links added per new node for a scale-free network. If m
             is the independent variable, this should be a list of ints.
         indep_var : string
-            Independent variable in the experiment. Must be one of 'size', 
+            Independent variable in the experiment. Must be one of 'size',
             'probability', 'k', 'm'.
         """
         super().__init__(socnet_top, root_dir, dir_reset, size, prob,
@@ -815,23 +815,23 @@ class Skiver(Experiment):
 
 class CivicParticipation(Experiment):
     def eval_cp(self):
-        """Examines the results of the civic participation simulation after it 
+        """Examines the results of the civic participation simulation after it
         has been run, and construct a matrix containing the binary state of
         whether voting to decide whether to run the role-assignment protocol
         has taken place.
-        
+
         Returns
         -------
         cp_matrix : numpy.ndarray
-            2D numpy array containing the role-assignment voting state. Can 
+            2D numpy array containing the role-assignment voting state. Can
             either be 1 or 0. Experiment rounds are in dimension 1, and ticks
             are in dimension 2.
-        """ 
+        """
         round_total = len(self.result)
         tick_total = len(self.result[0])-2
         assert (tick_total >= 1), " Cannot plot civic participation graph - no data available."
         cp_mtrx = np.zeros((round_total, tick_total))
-        
+
         for round_num in range(round_total):
             round_dict = self.result[round_num]
             for tick_num in range(tick_total):
@@ -840,20 +840,20 @@ class CivicParticipation(Experiment):
                 if vote_successful == 'True':
                     cp_mtrx[round_num, tick_num] = 1.0
         return cp_mtrx
-    
+
     def plot(self, filename='', show=True, ax=None, title=""):
         """
         Plots a colormap plot of the state of role-assignment voting, for each
         tick of each experiment round.
-        
+
         Parameters
         ----------
         filename : string
-            Name of the file to save the plot in. This only happens when 
+            Name of the file to save the plot in. This only happens when
             ax is not specified. (default is '')
         show : bool
             Displays the figure after plotting is finished. (default is false)
-        ax : matplotlib.pyplot.axes.Axes 
+        ax : matplotlib.pyplot.axes.Axes
             The set of axes to draw the colormap on. If not specified, a new
             figure and axes are created.
         title : string
@@ -863,10 +863,10 @@ class CivicParticipation(Experiment):
         if not ax:
             fig, ax = plt.subplots()
             save_fig = True
-        
+
         im_matrix = self.eval_cp()
         round_total, tick_total = im_matrix.shape
-        
+
         c = ax.pcolormesh(im_matrix)
         print('Civic Participation matrix output')
         print(im_matrix)
@@ -882,21 +882,21 @@ class CivicParticipation(Experiment):
         if save_fig and filename:
             plt.savefig(filename)
 
-    
+
     def __init__(self, socnet_top='random', root_dir='Civic-Participation',
                  dir_reset=True, size=5, prob=0.25,
                  indep_var='', k=2, m=1):
-        """Object properties are initialized, by creating an object of the 
+        """Object properties are initialized, by creating an object of the
         subclass (Experiment)
-        
+
         Parameters
         ----------
         socnet_top : string
             Social network topology being investigated in the experiment. This
             must be one of 'ring', 'scale_free1', 'random1' or 'small_world1'.
             The 1 at the end of the names is because there are 2 versions of
-            the social network gernerating algorithms in SimDemopolis. The 
-            versions used here ensure that all nodes have at least one link. 
+            the social network gernerating algorithms in SimDemopolis. The
+            versions used here ensure that all nodes have at least one link.
             Whilst this makes the networks mathmatically imperfect, it prevents
             a divide-by-zero error in SimDemopolis.
         root_dir : string
@@ -905,12 +905,12 @@ class CivicParticipation(Experiment):
             If enabled, the self.reset_dir() method is run, clearing the root
             directory of previous results. (default is False)
         size : int
-            Size of the social network (number of nodes). (default is 5). If 
+            Size of the social network (number of nodes). (default is 5). If
             size is the independent variable, this should be a list of ints.
         prob : float
             Probability of link formation for a random network, or probability
             of link reassignment for a small-world network. If probability is
-            the independent variable, this should be a list of floats.       
+            the independent variable, this should be a list of floats.
         k : int
             Average degree for a small-world network. If k is the independent
             variable, this should be a list of ints.
@@ -918,12 +918,12 @@ class CivicParticipation(Experiment):
             Number of links added per new node for a scale-free network. If m
             is the independent variable, this should be a list of ints.
         indep_var : string
-            Independent variable in the experiment. Must be one of 'size', 
+            Independent variable in the experiment. Must be one of 'size',
             'probability', 'k', 'm'.
         """
         super().__init__(socnet_top, root_dir, dir_reset, size, prob,
              indep_var, k, m)
-        
+
 
 
 # -----------------------------------------------------------------------------
@@ -931,11 +931,11 @@ class CivicParticipation(Experiment):
 # -----------------------------------------------------------------------------
 
 def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
-                 prob=0.25, k=2, m=1, has_skiver=False, stack_limit='100g', 
+                 prob=0.25, k=2, m=1, has_skiver=False, stack_limit='100g',
                  table_space='50g'):
     """
     Run the SimDemopolis Prolog Queries, and return the stdout and stderr text
-    
+
     Parameters
     ----------
     interactive : bool
@@ -951,45 +951,45 @@ def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
         Social network topology being investigated in the experiment. This
         must be one of 'ring', 'scale_free1', 'random1' or 'small_world1'.
         The 1 at the end of the names is because there are 2 versions of
-        the social network gernerating algorithms in SimDemopolis. The 
-        versions used here ensure that all nodes have at least one link. 
+        the social network gernerating algorithms in SimDemopolis. The
+        versions used here ensure that all nodes have at least one link.
         Whilst this makes the networks mathmatically imperfect, it prevents
         a divide-by-zero error in SimDemopolis.
     size : int
         Size of the SimDemopolis social network. (default is 5)
     prob : float
-        Probability that a link is made for a random network, or 
+        Probability that a link is made for a random network, or
         probability a link is assigned for a small-world network. Does not
         apply to other networks. (default is 0.25)
     k : int
-        Average connectivity of a small_world network. Has no effect on 
+        Average connectivity of a small_world network. Has no effect on
         other networks (default is 2)
     m : int
-        Number of links per new node for a scale-free network. Has no 
+        Number of links per new node for a scale-free network. Has no
         effect on other networks (default is 1)
     stack_limit : string
-        Amount of memory allocated to the Prolog stack. (Provided as a 
-        command-line argument to Prolog) See the SWI-Prolog documentation for 
-        more details. (default is '100g')        
-    table_space : string
-        Amount of memory allocated to the Prolog table space. (Provided as a 
+        Amount of memory allocated to the Prolog stack. (Provided as a
         command-line argument to Prolog) See the SWI-Prolog documentation for
-        more details.        
+        more details. (default is '100g')
+    table_space : string
+        Amount of memory allocated to the Prolog table space. (Provided as a
+        command-line argument to Prolog) See the SWI-Prolog documentation for
+        more details.
     """
     halt = ""
     if not interactive:
         halt = "-t halt "
-        
+
     if has_skiver: # Prolog doesn't capitalize True or False
         has_skiver_str = 'true'
     else:
         has_skiver_str = 'false'
-        
-    # Command-line script which runs constructs SimDemopolis in SWI-Prolog, 
+
+    # Command-line script which runs constructs SimDemopolis in SWI-Prolog,
     # then runs the main query, run afterwards.
     sim_script = "swipl --stack_limit={} --table_space={} -s main.pl -g run {} \
     --socnet {} --agent_num {} --probability {} --small_world_connections {} \
-    --scale_free_links {} --skiver {} --ticks {}".format(stack_limit, table_space, halt, 
+    --scale_free_links {} --skiver {} --ticks {}".format(stack_limit, table_space, halt,
     socnet_top, size, prob, k, m, has_skiver_str, ticks)
     Output = subprocess.run(shlex.split(sim_script),
                             text=True,
@@ -1003,11 +1003,11 @@ def simDemopolis(interactive, ticks, socnet_top='scale_free2', size=5,
 
 def plot_sn_growth(net_top, size, prob=0.25, k=2):
     nx_dict = gen_socnet(net_top, size, prob, k)
-    
+
 def plot_qs_clustering(socnet_top='random1', indep_var='m', subdir='expt1'):
-    """Plots a graph of quasi-stability against the local clustering 
-    coefficient, based on a previously-run experiment. Quasi stability is 
-    defined as the number of times the voting state changes divided by the 
+    """Plots a graph of quasi-stability against the local clustering
+    coefficient, based on a previously-run experiment. Quasi stability is
+    defined as the number of times the voting state changes divided by the
     number of experiment rounds."""
     expt_dir = os.path.join('Civic-Participation', indep_var, socnet_top, subdir,
                             'Rounds')
@@ -1017,7 +1017,7 @@ def plot_qs_clustering(socnet_top='random1', indep_var='m', subdir='expt1'):
     qs_vec = cp.quasi_stability(cp_matrix)
     qs_mean = np.mean(qs_vec)
     print('Mean Quasi-Stability = {}'.format(qs_mean))
-    
+
     c_vec = cp.clustering()
     c_mean = np.mean(c_vec)
     print('Mean Clustering Coefficient = {}'.format(c_mean))
@@ -1026,13 +1026,13 @@ def plot_qs_clustering(socnet_top='random1', indep_var='m', subdir='expt1'):
                   qs_vec, delimiter=",")
     np.savetxt(os.path.join(expt_dir,"clustering.csv"),
                   c_vec, delimiter=",")
-    
+
     plt.plot(c_vec, qs_vec, 'rx')
     plt.xlabel('Local Clustering Coefficient')
     plt.ylabel('Quasi-Stability (changes per tick)')
     plt.savefig(os.path.join(expt_dir,'qs_clustering.eps'))
     plt.show()
-    
+
 def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
     expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
                             'Rounds')
@@ -1040,18 +1040,18 @@ def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
     cp.load_result()
     deg_tir_list = cp.degree_time_in_role()
     deg_tir_matrix = deg_tir_list[round_num]
-    data_path = os.path.join(expt_dir, 
+    data_path = os.path.join(expt_dir,
                              'degree_time_in_role{}.csv'.format(round_num))
     np.savetxt(data_path, deg_tir_matrix, delimiter=",")
     plt.plot(deg_tir_matrix[:,0], deg_tir_matrix[:,1], 'rx')
     plt.title('{}, round {}'.format(socnet_top, round_num+1))
     plt.xlabel('Node Degree')
     plt.ylabel('Time In Role')
-    img_path = os.path.join(expt_dir, 
+    img_path = os.path.join(expt_dir,
                              'degree_time_in_role{}.eps'.format(round_num))
     plt.savefig(img_path)
     plt.show()
-    
+
 def plot_deggini_tir(socnet_top='scale_free1', indep_var='m', subdir='expt1'):
     expt_dir = os.path.join('Civic-Participation', indep_var, socnet_top, subdir,
                             'Rounds')
@@ -1068,7 +1068,7 @@ def plot_deggini_tir(socnet_top='scale_free1', indep_var='m', subdir='expt1'):
     plt.ylabel('Quasi-Stability (changes per tick)')
     plt.savefig(os.path.join(expt_dir,'deg_gini_tir.eps'))
     plt.show()
-    
+
 def get_stats(indep_var, socnet_top='scale_free1', subdir='expt1'):
     print(socnet_top)
     print(subdir)
@@ -1131,7 +1131,7 @@ def plot_scale_free(size=20):
                kamada_kawai=True)
 
 def plot_scale_free_growth():
-    """Generates and plots a scale-free networks of a range of sizes using 
+    """Generates and plots a scale-free networks of a range of sizes using
     SimDemopolis, to illustrate the growth of these networks.
     """
     size_list = range(1,9)
@@ -1141,8 +1141,8 @@ def plot_scale_free_growth():
         nx_dict = gen_socnet('scale_free', size)
         plot_graph(nx_dict,
                    os.path.join('Network-Plots','scale_free_growth.eps'),
-                   ax=ax, show=False, title=r'$N={}$'.format(size), 
-                   kamada_kawai=True)                  
+                   ax=ax, show=False, title=r'$N={}$'.format(size),
+                   kamada_kawai=True)
     plt.show()
 
 # -----------------------------------------------------------------------------
@@ -1164,89 +1164,89 @@ def cp_prob(socnet_top, prob_list):
     root_dir = os.path.join('Civic-Participation',
                             'probability', socnet_top)
     try:
-        cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
-                                prob=prob_list, indep_var='probability', 
+        cp = CivicParticipation(socnet_top, dir_reset=True, size=70,
+                                prob=prob_list, indep_var='probability',
                                 root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation probability experiment failed')
         print(error)
-        
+
 def sk_prob(socnet_top, prob_list, has_skiver=False):
     root_dir = os.path.join('Skiver',
                             'probability', socnet_top)
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30,
-                                prob=prob_list, indep_var='probability', 
+                                prob=prob_list, indep_var='probability',
                                 root_dir=root_dir, has_skiver=has_skiver)
-        sk.plot_range(rounds=10, ticks=40, load=False)
+        sk.plot_range(rounds=10, ticks=40, load=True)
     except AssertionError as error:
         print('Skiver probability experiment failed')
         print(error)
 
 def cp_k(k_list):
     # the k parameter only applies to small-world networks
-    socnet_top = 'small_world1' 
+    socnet_top = 'small_world1'
     root_dir = os.path.join('Civic-Participation', 'k', socnet_top)
-                            
+
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=30, prob=0.25,
-                                indep_var='k', k=k_list, root_dir=root_dir)                                
+                                indep_var='k', k=k_list, root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation small-world k experiment failed')
         print(error)
-        
+
 def sk_k(k_list, has_skiver=False):
     # the k parameter only applies to small-world networks
-    socnet_top = 'small_world1' 
+    socnet_top = 'small_world1'
     root_dir = os.path.join('Skiver', 'k', socnet_top)
-                            
+
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30, prob=0.25,
-                                indep_var='k', k=k_list, root_dir=root_dir, has_skiver=has_skiver,)                                
+                                indep_var='k', k=k_list, root_dir=root_dir, has_skiver=has_skiver,)
         sk.plot_range(rounds=10, ticks=40, load=False)
     except AssertionError as error:
         print('Skiver small-world k experiment failed')
         print(error)
-        
+
 def cp_m(m_list):
     # the m parameter only applies to scale-free networks
-    socnet_top = 'scale_free2' 
+    socnet_top = 'scale_free2'
     root_dir = os.path.join('Civic-Participation', 'm', socnet_top)
-    
+
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
-                                indep_var='m', m=m_list, root_dir=root_dir)                                
+                                indep_var='m', m=m_list, root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation scale-free m experiment failed')
         print(error)
-        
-        
+
+
 def sk_m(m_list, has_skiver=False):
     # the m parameter only applies to scale-free networks
-    socnet_top = 'scale_free' 
+    socnet_top = 'scale_free'
     if has_skiver:
         dir_str = 'With-Skiver'
     else:
         dir_str = 'Without-Skiver'
     root_dir = os.path.join('Skiver', dir_str, 'm', socnet_top)
-    
+
     try:
         sk = Skiver(socnet_top, dir_reset=True, size=30,
-                                indep_var='m', m=m_list, root_dir=root_dir, has_skiver=has_skiver)                                
+                                indep_var='m', m=m_list, root_dir=root_dir, has_skiver=has_skiver)
         sk.plot_range(rounds=10, ticks=40, load=False)
     except AssertionError as error:
         print('Skiver scale-free m experiment failed')
         print(error)
-        
+
 # -----------------------------------------------------------------------------
 # Test code (for development)
 # -----------------------------------------------------------------------------
 def test_parse():
     """
-    Test the text parsing functionality from a samle SimDemopolis output from 
+    Test the text parsing functionality from a samle SimDemopolis output from
     a file
     """
     with open('Development/test_output.txt') as f:
@@ -1271,14 +1271,14 @@ def test_cp_graph():
     sd_dict = cp.result[0]
     nx_dict = sd2nx(sd_dict)
     agent_list, sn_list = nx2sd(nx_dict)
-    
+
 def test_skiver_graph():
     sk = Skiver()
     sk.load_result()
     sd_dict = sk.result[0]
     nx_dict = sd2nx(sd_dict)
     agent_list, sn_list = nx2sd(nx_dict)
-    
+
 def test_cp_size_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Civic-Participation','Test-Size',socnet_top)
@@ -1286,7 +1286,7 @@ def test_cp_size_plot_range():
     cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
                             prob=0.25, indep_var='size', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=5)
-    
+
 def test_sk_size_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Skiver','Test-Size',socnet_top)
@@ -1294,7 +1294,7 @@ def test_sk_size_plot_range():
     sk = Skiver(socnet_top, dir_reset=True, size=size_list,
                             prob=0.25, indep_var='size', root_dir=root_dir)
     sk.plot_range(rounds=10, ticks=5)
-    
+
 def test_prob_plot_range():
     socnet_top='small_world1'
     root_dir = os.path.join('Civic-Participation','Test-Prob',socnet_top)
@@ -1302,12 +1302,12 @@ def test_prob_plot_range():
     cp = CivicParticipation(socnet_top, dir_reset=True, size=7,
                             prob=prob_list, indep_var='probability', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=3)
-    
+
 def test_k_plot_range():
     socnet_top='small_world1'
     root_dir = os.path.join('Civic-Participation','Test-k',socnet_top)
     k_list = [1,2, 3, 4]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, prob=0.25, 
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, prob=0.25,
                             k=k_list, indep_var='k', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=3)
 
@@ -1315,26 +1315,26 @@ def test_cp_m_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Civic-Participation','Test-m',socnet_top)
     m_list = [1, 2]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, m=m_list, 
-                            indep_var='m', root_dir=root_dir)                        
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, m=m_list,
+                            indep_var='m', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=3)
-    
-    
+
+
 def test_sk_m_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Skiver','Test-m',socnet_top)
     m_list = [1, 2]
-    cp = Skiver(socnet_top, dir_reset=True, size=7, m=m_list, 
-                            indep_var='m', root_dir=root_dir, has_skiver=True)                        
+    cp = Skiver(socnet_top, dir_reset=True, size=7, m=m_list,
+                            indep_var='m', root_dir=root_dir, has_skiver=True)
     cp.plot_range(rounds=10, ticks=3)
 
 def plot_sn_growth(net_top, size, prob=0.25, k=2):
     nx_dict = gen_socnet(net_top, size, prob, k)
-    
+
 def plot_qs_clustering(socnet_top='random1', subdir='expt1'):
-    """Plots a graph of quasi-stability against the local clustering 
-    coefficient, based on a previously-run experiment. Quasi stability is 
-    defined as the number of times the voting state changes divided by the 
+    """Plots a graph of quasi-stability against the local clustering
+    coefficient, based on a previously-run experiment. Quasi stability is
+    defined as the number of times the voting state changes divided by the
     number of experiment rounds."""
     expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
                             'Rounds')
@@ -1344,7 +1344,7 @@ def plot_qs_clustering(socnet_top='random1', subdir='expt1'):
     qs_vec = cp.quasi_stability(cp_matrix)
     qs_mean = np.mean(qs_vec)
     print('Mean Quasi-Stability = {}'.format(qs_mean))
-    
+
     c_vec = cp.clustering()
     c_mean = np.mean(c_vec)
     print('Mean Clustering Coefficient = {}'.format(c_mean))
@@ -1353,13 +1353,13 @@ def plot_qs_clustering(socnet_top='random1', subdir='expt1'):
                   qs_vec, delimiter=",")
     np.savetxt(os.path.join(expt_dir,"clustering.csv"),
                   c_vec, delimiter=",")
-    
+
     plt.plot(c_vec, qs_vec, 'rx')
     plt.xlabel('Local Clustering Coefficient')
     plt.ylabel('Quasi-Stability (changes per tick)')
     plt.savefig(os.path.join(expt_dir,'qs_clustering.eps'))
     plt.show()
-    
+
 def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
     expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
                             'Rounds')
@@ -1367,18 +1367,18 @@ def plot_degree_tir(socnet_top='scale_free1', subdir='expt3', round_num=13):
     cp.load_result()
     deg_tir_list = cp.degree_time_in_role()
     deg_tir_matrix = deg_tir_list[round_num]
-    data_path = os.path.join(expt_dir, 
+    data_path = os.path.join(expt_dir,
                              'degree_time_in_role{}.csv'.format(round_num))
     np.savetxt(data_path, deg_tir_matrix, delimiter=",")
     plt.plot(deg_tir_matrix[:,0], deg_tir_matrix[:,1], 'rx')
     plt.title('{}, round {}'.format(socnet_top, round_num+1))
     plt.xlabel('Node Degree')
     plt.ylabel('Time In Role')
-    img_path = os.path.join(expt_dir, 
+    img_path = os.path.join(expt_dir,
                              'degree_time_in_role{}.eps'.format(round_num))
     plt.savefig(img_path)
     plt.show()
-    
+
 def plot_deggini_tir(socnet_top='scale_free1', subdir='expt1'):
     expt_dir = os.path.join('Civic-Participation', 'm', socnet_top, subdir,
                             'Rounds')
@@ -1395,7 +1395,7 @@ def plot_deggini_tir(socnet_top='scale_free1', subdir='expt1'):
     plt.ylabel('Quasi-Stability (changes per tick)')
     plt.savefig(os.path.join(expt_dir,'deg_gini_tir.eps'))
     plt.show()
-    
+
 
 def plot_ring(size=10):
     """Generates a ring network of the specified size using
@@ -1449,7 +1449,7 @@ def plot_scale_free(size=20):
                kamada_kawai=True)
 
 def plot_scale_free_growth():
-    """Generates and plots a scale-free networks of a range of sizes using 
+    """Generates and plots a scale-free networks of a range of sizes using
     SimDemopolis, to illustrate the growth of these networks.
     """
     size_list = range(1,9)
@@ -1459,8 +1459,8 @@ def plot_scale_free_growth():
         nx_dict = gen_socnet('scale_free', size)
         plot_graph(nx_dict,
                    os.path.join('Network-Plots','scale_free_growth.eps'),
-                   ax=ax, show=False, title=r'$N={}$'.format(size), 
-                   kamada_kawai=True)                  
+                   ax=ax, show=False, title=r'$N={}$'.format(size),
+                   kamada_kawai=True)
     plt.show()
 
 # -----------------------------------------------------------------------------
@@ -1472,7 +1472,7 @@ def cp_size(socnet_top, size_list):
     root_dir = os.path.join('Civic-Participation','size',socnet_top)
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
-                                prob=0.25, indep_var='size', root_dir=root_dir)
+                                prob=0.25, indep_var='size', m=2, root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation size experiment failed')
@@ -1483,7 +1483,7 @@ def cp_prob(socnet_top, prob_list):
                             'probability', socnet_top)
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
-                                prob=prob_list, indep_var='probability', 
+                                prob=prob_list, indep_var='probability',
                                 root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
@@ -1492,36 +1492,36 @@ def cp_prob(socnet_top, prob_list):
 
 def cp_k(k_list):
     # the k parameter only applies to small-world networks
-    socnet_top = 'small_world1' 
+    socnet_top = 'small_world1'
     root_dir = os.path.join('Civic-Participation', 'k', socnet_top)
-                            
+
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=30, prob=0.25,
-                                indep_var='k', k=k_list, root_dir=root_dir)                                
+                                indep_var='k', k=k_list, root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation small-world k experiment failed')
         print(error)
-        
+
 def cp_m(m_list):
     # the m parameter only applies to scale-free networks
-    socnet_top = 'scale_free2' 
+    socnet_top = 'scale_free2'
     root_dir = os.path.join('Civic-Participation', 'm', socnet_top)
-    
+
     try:
         cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
-                                indep_var='m', m=m_list, root_dir=root_dir)                                
+                                indep_var='m', m=m_list, root_dir=root_dir)
         cp.plot_range(rounds=20, ticks=40, load=False)
     except AssertionError as error:
         print('Civic participation scale-free m experiment failed')
         print(error)
-        
+
 # -----------------------------------------------------------------------------
 # Test code (for development)
 # -----------------------------------------------------------------------------
 def test_parse():
     """
-    Test the text parsing functionality from a samle SimDemopolis output from 
+    Test the text parsing functionality from a samle SimDemopolis output from
     a file
     """
     with open('Development/test_output.txt') as f:
@@ -1535,7 +1535,7 @@ def create_test_output():
     """
     Write sample SimDemopolis output to file (for debugging)
     """
-    (stdout, stderr) = simDemopolis(False, 0)
+    (stdout, stderr) = simDemopolis(True, 0)
     with open('Development/test_output.txt', 'w') as f:
         f.write(stdout)
     print(stderr)
@@ -1546,7 +1546,7 @@ def test_graph():
     sd_dict = cp.result[0]
     nx_dict = sd2nx(sd_dict)
     agent_list, sn_list = nx2sd(nx_dict)
-    
+
 def test_size_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Civic-Participation','Test-Size',socnet_top)
@@ -1554,20 +1554,20 @@ def test_size_plot_range():
     cp = CivicParticipation(socnet_top, dir_reset=True, size=size_list,
                             prob=0.25, indep_var='size', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=5)
-    
+
 def test_prob_plot_range():
     socnet_top='small_world1'
     root_dir = os.path.join('Civic-Participation','Test-Prob',socnet_top)
-    prob_list = [0.25, 0.5, 0.75]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7,
+    prob_list = [0.5, 0.75]
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=30,
                             prob=prob_list, indep_var='probability', root_dir=root_dir)
-    cp.plot_range(rounds=10, ticks=3)
-    
+    cp.plot_range(rounds=1, ticks=40)
+
 def test_k_plot_range():
     socnet_top='small_world1'
     root_dir = os.path.join('Civic-Participation','Test-k',socnet_top)
     k_list = [1,2, 3, 4]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, prob=0.25, 
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, prob=0.25,
                             k=k_list, indep_var='k', root_dir=root_dir)
     cp.plot_range(rounds=10, ticks=3)
 
@@ -1575,16 +1575,15 @@ def test_m_plot_range():
     socnet_top='scale_free1'
     root_dir = os.path.join('Civic-Participation','Test-m',socnet_top)
     m_list = [1, 2]
-    cp = CivicParticipation(socnet_top, dir_reset=True, size=7, m=m_list, 
-                            indep_var='m', root_dir=root_dir)                        
-    cp.plot_range(rounds=10, ticks=3)
-    
+    cp = CivicParticipation(socnet_top, dir_reset=True, size=40, m=m_list,
+                            indep_var='m', root_dir=root_dir)
+    cp.plot_range(rounds=1, ticks=40)
+
 if __name__ == "__main__":
     cp_size('scale_free2', [20,30,40])
-    #cp_prob('random1',[0.25, 0.5, 0.75, 1.0])
+    #cp_prob('random1',[0.25, 0.5, 0.75])
     #sk_m([1,2,3,5], True)
-    #sk_prob('random1', [0.25,0.5,0.75])
+    # sk_prob('random1', [0.25])
     #sk_prob('small_world1', [0.25,0.5,0.75])
-    #test_sk_m_plot_range()
-    #create_test_output()
-
+    # test_m_plot_range()
+    # create_test_output()

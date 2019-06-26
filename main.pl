@@ -25,7 +25,7 @@
 :- [stats]. % Compute various statistics about SimDemopolis
 
 run :-
-        % spy(delete_largest_hub),
+    %spy(opinion_formation_loop),
         get_args( Args ),
         subset( [
             agent_num(N),
@@ -48,7 +48,7 @@ run :-
 	init_citizenship( I ),
 	init_participation_chk( I, participation ),
 	init_role_assignment( I, role_assign ),
-	init_access_control( I, access_control ),
+ 	init_access_control( I, access_control ),
 	init_resource_alloc( I, resource_alloc ),
 	init_minor_claims( I, minor_claims ),
 	inst_inspector( I ),
@@ -115,6 +115,7 @@ role_assign_test( I, _, Stop ) :-
 	true.
 
 role_assign_test( I, Agents, Stop ) :-
+    prolog_current_frame(F), format('~d~n',[F]),
         write("NEW ROUND"),nl,
 	b_getval( tick, T ),
         T1 is T + 1,

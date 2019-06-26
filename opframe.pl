@@ -14,12 +14,12 @@ initialise_off( [A|Rest] ) :-
 
 initialise_sc( A ) :-
 	random(X),
-        SC is round(X*100)/100, 
+        SC is round(X*100)/100,
 	set_path_val( A, off^^sconf, SC ).
 
 initialise_opn_mu( A, random ) :-
 	random(X),
-        OMu is round(X*100)/100, 
+        OMu is round(X*100)/100,
 	set_path_val( A, off^^mu, OMu ),
 	set_path_val( A, off^^opn, OMu ).
 initialise_opn_mu( A, ginirole(I) ) :-
@@ -60,7 +60,7 @@ initialise_om( [A|Rest], I ) :-
 of_loop( _, 100 ) :-
 	!.
 of_loop( Agents, N ) :-
-	off_cycle( Agents ),
+	off_cycle( Agents ), !,
 	N1 is N + 1,
 %write( '.' ),
         of_loop( Agents, N1 ).
@@ -70,11 +70,12 @@ of_loop( Agents, N ) :-
 ** Opinion Formation Cycle
 */
 off_cycle( Agents ) :-
-	opinion_exchange( Agents ),
-        process_opinions( Agents ),
-        update_opinions( Agents ),
-        update_affinities( Agents ),
-        update_weights( Agents ).
+    %opinion_exchange( Agents ),
+    opinion_exchange( Agents ),
+    process_opinions( Agents ),
+    update_opinions( Agents ),
+    update_affinities(Agents),
+    update_weights( Agents ).
 
 update_weights( [] ).
 
@@ -154,7 +155,6 @@ update_affinity( A ) :-
 	update_each_affinity( A, [A|Agents], Mui, MaxOMu, [], NewAffs ),
 	set_path_val( A, off^^aij, NewAffs ).
 
-
 update_each_affinity( _, [], _, _, NewAffs, NewAffs ).
 
 update_each_affinity( A, [J|T], Mui, MaxOMu, Affs, NewAffs ) :-
@@ -168,10 +168,9 @@ maxomu( Mui, MaxOMu ) :-
 	Mui < 0.5, !,
 	MaxOMu is round((1-Mui) * 100) / 100.
 maxomu( Mui, Mui ).
-	
 
 update_weight( A ) :-
-	get_path_val( A, off^^wij, Weights ),
+        get_path_val( A, off^^wij, Weights ),
 	get_path_val( A, off^^aij, Affinities ),
 	sum_all_weights( Weights, Affinities, 0, SumWK ),
 	calc_new_weights( Weights, Affinities, SumWK, [], NewWeights ),
@@ -196,13 +195,12 @@ normalise_each_weight( [(A,W)|T], Sum, SoFar, FinalWeights ) :-
 
 
 calc_new_weights( [], _, _, NewWeights, NewWeights ).
-	
+
 calc_new_weights( [(A,Wgh)|T], Affinities, SumWIJ, SoFar, NewWeights ) :-
-	member( (A,Aff), Affinities ),
+	member( (A,Aff), Affinities ),!,
 	NewWgh is round(((Wgh + (Wgh*Aff)) / SumWIJ) * 100) / 100,
 	calc_new_weights( T, Affinities, SumWIJ, [(A,NewWgh)|SoFar], NewWeights ).
 
-	
 sum_all_weights( [], _, SumWK, SumWK ).
 
 sum_all_weights( [(A,Wgh)|T], Affinities, SoFar, SumWK ) :-
@@ -210,6 +208,12 @@ sum_all_weights( [(A,Wgh)|T], Affinities, SoFar, SumWK ) :-
 	NewSoFar is round((SoFar + (Wgh + (Wgh*Aff))) * 100) / 100,
 	sum_all_weights( T, Affinities, NewSoFar, SumWK ).
 
+write_time(_,0,_,_,_).
+write_time(A, T, Mui, Agents, NewAffs):-
+    write(A),nl,
+    write(Mui), nl,
+    write(Agents), nl,
+    write(NewAffs), nl.
 
 /*
 ** Miscellaneous

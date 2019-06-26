@@ -97,12 +97,12 @@ pp_onoff( minor_claims, on ).
 
 pp_onoff( agent, on ).
 pp_onoff( 'citizenship', on ).
-pp_onoff( 'message_queue', on ).
+pp_onoff( 'message_queue', off ).
 pp_onoff( 'social_network', on ).
-pp_onoff( 'opinion_formation', on ).
-pp_onoff( selfconf, on ).
-pp_onoff( mu, on ).
-pp_onoff( opinion, on ).
-pp_onoff( weight_ij, on ).
-pp_onoff( affinity_ij, on ).
-pp_onoff( opinion_ij, on ).
+pp_onoff( 'opinion_formation', off ).
+pp_onoff( selfconf, off ).
+pp_onoff( mu, off ).
+pp_onoff( opinion, off ).
+pp_onoff( weight_ij, off ).
+pp_onoff( affinity_ij, off ).
+pp_onoff( opinion_ij, off ).
