@@ -1580,7 +1580,7 @@ def test_m_plot_range():
     cp.plot_range(rounds=1, ticks=40)
 
 if __name__ == "__main__":
-    cp_size('scale_free2', [20,30,40])
+    cp_size('scale_free2', [20,30,40,60,80,100])
     #cp_prob('random1',[0.25, 0.5, 0.75])
     #sk_m([1,2,3,5], True)
     # sk_prob('random1', [0.25])

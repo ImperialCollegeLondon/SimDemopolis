@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>run module &#8212; SimDemopolis  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-run">
+<span id="run-module"></span><h1>run module<a class="headerlink" href="#module-run" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="run-py">
+<h2>run.py<a class="headerlink" href="#run-py" title="Permalink to this headline">¶</a></h2>
+<p>Automatically run SimDemopolis, parse the output, analyse and plot the data.</p>
+<dl class="class">
+<dt id="run.CivicParticipation">
+<em class="property">class </em><code class="sig-prename descclassname">run.</code><code class="sig-name descname">CivicParticipation</code><span class="sig-paren">(</span><em class="sig-param">socnet_top='random'</em>, <em class="sig-param">root_dir='Civic-Participation'</em>, <em class="sig-param">dir_reset=True</em>, <em class="sig-param">size=5</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">indep_var=''</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=1</em><span class="sig-paren">)</span><a class="headerlink" href="#run.CivicParticipation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#run.Experiment" title="run.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">run.Experiment</span></code></a></p>
+<dl class="method">
+<dt id="run.CivicParticipation.eval_cp">
+<code class="sig-name descname">eval_cp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.CivicParticipation.eval_cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Examines the results of the civic participation simulation after it
+has been run, and construct a matrix containing the binary state of
+whether voting to decide whether to run the role-assignment protocol
+has taken place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>cp_matrix</strong> – 2D numpy array containing the role-assignment voting state. Can
+either be 1 or 0. Experiment rounds are in dimension 1, and ticks
+are in dimension 2.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.CivicParticipation.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">filename=''</em>, <em class="sig-param">show=True</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">title=''</em><span class="sig-paren">)</span><a class="headerlink" href="#run.CivicParticipation.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a colormap plot of the state of role-assignment voting, for each
+tick of each experiment round.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the file to save the plot in. This only happens when
+ax is not specified. (default is ‘’)</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Displays the figure after plotting is finished. (default is false)</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.pyplot.axes.Axes</em>) – The set of axes to draw the colormap on. If not specified, a new
+figure and axes are created.</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – Title to give the graph.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="run.Experiment">
+<em class="property">class </em><code class="sig-prename descclassname">run.</code><code class="sig-name descname">Experiment</code><span class="sig-paren">(</span><em class="sig-param">socnet_top</em>, <em class="sig-param">root_dir</em>, <em class="sig-param">dir_reset=True</em>, <em class="sig-param">size=5</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">indep_var=''</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=2</em>, <em class="sig-param">has_skiver=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for SimDemopolis experiments, with functions common to all
+experiments. Subclass this to create new experiments.</p>
+<dl class="method">
+<dt id="run.Experiment.clustering">
+<code class="sig-name descname">clustering</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the local clustering coefficients of the social networks of
+each round of the experiment, from the result property of the caller
+object. A graph is creating for this purpose within the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>c</strong> – 1D NumPy array containing the clustering coefficients of each
+round of the experiment.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.deg_gini">
+<code class="sig-name descname">deg_gini</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.deg_gini" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.degree_time_in_role">
+<code class="sig-name descname">degree_time_in_role</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.degree_time_in_role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calulate the social network degree and time in role of each agent
+in SimDemopolis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.load_result">
+<code class="sig-name descname">load_result</code><span class="sig-paren">(</span><em class="sig-param">file_name=''</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.load_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads results for previous experiment from file. Allows results to be
+analyzed without running SimDemopolis again. The loaded results are
+stored in the Experiment object calling this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – File path to load the results from. If not specified, this defaults
+to the experiment root directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skleleton function to plot experiment output. Subclass this to add
+the functionality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.plot_range">
+<code class="sig-name descname">plot_range</code><span class="sig-paren">(</span><em class="sig-param">rounds=10</em>, <em class="sig-param">ticks=1</em>, <em class="sig-param">load=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.plot_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run and plot a range of experiments in subplots on the same figure,
+modifying an independent variable determined by the indep_var property
+of the calling Experiment object. The graph is saved in the ‘Rounds’
+subdirectory of the experiment root.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rounds</strong> (<em>int</em>) – Number of rounds per experiment. (default is 10)</p></li>
+<li><p><strong>ticks</strong> (<em>int</em>) – Number of ticks (time units) per round. (default is 1)</p></li>
+<li><p><strong>load</strong> (<em>bool</em>) – Load previous experiment results from files, rather than run the
+experiment again. (default is False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.print_info">
+<code class="sig-name descname">print_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.print_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.quasi_stability">
+<code class="sig-name descname">quasi_stability</code><span class="sig-paren">(</span><em class="sig-param">cp_matrix</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.quasi_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the quasi stability of each round of a role-assignment
+experiment. This is equal to the number of changes in whether a vote
+is taking place, divided by the number of rounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cp_matrix</strong> (<em>numpy.ndarray</em>) – 2D NumPy array containing the values of whether a vote has taken
+place (either 1 or zero) for each tick of each round of the
+experiment. The rounds are in the 1st dimension, and the ticks are
+in the 2nd dimension.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>qs_vector</strong> – 1D NumPy array containing the quasi-stability values for each
+round. These are floats between 0 and 1.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.reset_dir">
+<code class="sig-name descname">reset_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.reset_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the experiment directory contents to allow another experiment
+to be conducted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="run.Experiment.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">rounds</em>, <em class="sig-param">ticks=10</em>, <em class="sig-param">subdir='Rounds'</em>, <em class="sig-param">size=5</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=1</em>, <em class="sig-param">load=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Experiment.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the SimDemopolis program a specified number of times with
+the set parameters, saves the results, plots the social network graphs,
+and appends the result to the result property of the calling  Experiment
+object The results can be loaded from files if the experiment has been
+run previously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rounds</strong> (<em>int</em>) – Number of rounds in the experiment (the number of times
+SimDemopolis is run).</p></li>
+<li><p><strong>ticks</strong> (<em>int</em>) – Number of ticks (time units) in each round. (default is 10)</p></li>
+<li><p><strong>subdir</strong> (<em>string</em>) – Subdirectory of the experiment root to save the results in.
+(default is ‘Rounds’)</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the SimDemopolis social network. (default is 5)</p></li>
+<li><p><strong>prob</strong> (<em>float</em>) – Probability that a link is made for a random network, or
+probability a link is assigned for a small-world network. Does not
+apply to other networks.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Average connectivity of a small_world network. Has no effect on
+other networks (default is 2)</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Number of links per new node for a scale-free network. Has no
+effect on other networks (default is 1)</p></li>
+<li><p><strong>load</strong> (<em>bool</em>) – Load previous results from file rather than generate them from
+SimDemopolis. (default is False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="run.Skiver">
+<em class="property">class </em><code class="sig-prename descclassname">run.</code><code class="sig-name descname">Skiver</code><span class="sig-paren">(</span><em class="sig-param">socnet_top='random'</em>, <em class="sig-param">root_dir='Skiver'</em>, <em class="sig-param">dir_reset=True</em>, <em class="sig-param">size=5</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">indep_var=''</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=1</em>, <em class="sig-param">has_skiver=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Skiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#run.Experiment" title="run.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">run.Experiment</span></code></a></p>
+<dl class="method">
+<dt id="run.Skiver.get_time_in_role">
+<code class="sig-name descname">get_time_in_role</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.Skiver.get_time_in_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="run.Skiver.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">show=True</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">title=''</em><span class="sig-paren">)</span><a class="headerlink" href="#run.Skiver.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skleleton function to plot experiment output. Subclass this to add
+the functionality.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="run.cluster_qs_corr">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">cluster_qs_corr</code><span class="sig-paren">(</span><em class="sig-param">indep_var</em>, <em class="sig-param">socnet_top</em>, <em class="sig-param">subdir</em><span class="sig-paren">)</span><a class="headerlink" href="#run.cluster_qs_corr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.cp_k">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">cp_k</code><span class="sig-paren">(</span><em class="sig-param">k_list</em><span class="sig-paren">)</span><a class="headerlink" href="#run.cp_k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.cp_m">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">cp_m</code><span class="sig-paren">(</span><em class="sig-param">m_list</em><span class="sig-paren">)</span><a class="headerlink" href="#run.cp_m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.cp_prob">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">cp_prob</code><span class="sig-paren">(</span><em class="sig-param">socnet_top</em>, <em class="sig-param">prob_list</em><span class="sig-paren">)</span><a class="headerlink" href="#run.cp_prob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.cp_size">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">cp_size</code><span class="sig-paren">(</span><em class="sig-param">socnet_top</em>, <em class="sig-param">size_list</em><span class="sig-paren">)</span><a class="headerlink" href="#run.cp_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.create_test_output">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">create_test_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.create_test_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write sample SimDemopolis output to file (for debugging)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.deg_gini_qs_corr">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">deg_gini_qs_corr</code><span class="sig-paren">(</span><em class="sig-param">indep_var</em>, <em class="sig-param">socnet_top</em>, <em class="sig-param">subdir</em><span class="sig-paren">)</span><a class="headerlink" href="#run.deg_gini_qs_corr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.gen_socnet">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">gen_socnet</code><span class="sig-paren">(</span><em class="sig-param">net_top</em>, <em class="sig-param">size=10</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=2</em><span class="sig-paren">)</span><a class="headerlink" href="#run.gen_socnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate social networks from SimDemopolis, without running the role-
+assignment loop</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.get_stats">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">get_stats</code><span class="sig-paren">(</span><em class="sig-param">indep_var</em>, <em class="sig-param">socnet_top='scale_free1'</em>, <em class="sig-param">subdir='expt1'</em><span class="sig-paren">)</span><a class="headerlink" href="#run.get_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.gini">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">gini</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#run.gini" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.has_voted">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">has_voted</code><span class="sig-paren">(</span><em class="sig-param">pp_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.has_voted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the SimDemopolis output to see if a vote to trigger the role
+assignment has taken place
+:rtype: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.is_pointer">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">is_pointer</code><span class="sig-paren">(</span><em class="sig-param">head</em>, <em class="sig-param">tail</em><span class="sig-paren">)</span><a class="headerlink" href="#run.is_pointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if an atom points to another term. Head is the atom
+at the start of the string. Pointers are of the form ‘atom^^term.’ Returns
+a boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.nx2sd">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">nx2sd</code><span class="sig-paren">(</span><em class="sig-param">nx_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#run.nx2sd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary generated from a networkx graph to a format suitable
+for SimDemopolis</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_dict">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_dict</code><span class="sig-paren">(</span><em class="sig-param">inst_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a string begins with a “key: value” format, return the key and parsed
+value as a tuple, for insertion into a dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_dict2">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_dict2</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">val</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_dict2" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a string begins with an atom pointing to another term (key^^val),
+convert the key^^val to a dictionary. val can either be an atom or a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>(output, rest)</strong> – The parsed beginning of the string as a dictionary, and the rest as a
+string.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(dictionary, string)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_institution">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_institution</code><span class="sig-paren">(</span><em class="sig-param">inst_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_institution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse an institution string from SimDemopolis into a Python dictionary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_list">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_list</code><span class="sig-paren">(</span><em class="sig-param">list_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the list at the beginning of a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>(output, rest)</strong> – The parsed beginning of the string as a list, and the rest as a string.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(list, string)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_pairs">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_pairs</code><span class="sig-paren">(</span><em class="sig-param">inst_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows (key, value) pairs to be parsed more easily by converting to key^^value
+format. This prevents confusion with lists in parentheses.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.parse_term">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">parse_term</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#run.parse_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a term at the beginning of a string, and detmines the
+type of the term, parsing as neccessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parsed term from the beginning of a list, and the rest as a string.
+This can either be a list or a string.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(term, rest)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_deggini_tir">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_deggini_tir</code><span class="sig-paren">(</span><em class="sig-param">socnet_top='scale_free1'</em>, <em class="sig-param">subdir='expt1'</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_deggini_tir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.plot_degree_tir">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_degree_tir</code><span class="sig-paren">(</span><em class="sig-param">socnet_top='scale_free1'</em>, <em class="sig-param">subdir='expt3'</em>, <em class="sig-param">round_num=13</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_degree_tir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.plot_graph">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_graph</code><span class="sig-paren">(</span><em class="sig-param">sn_dict</em>, <em class="sig-param">file_name=''</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">title=''</em>, <em class="sig-param">show=True</em>, <em class="sig-param">circle=False</em>, <em class="sig-param">figure=1</em>, <em class="sig-param">close=False</em>, <em class="sig-param">kamada_kawai=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_graph" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Converts a dictionary (JSON) in the nx documentation) in an nx node-link</dt><dd><p>format into an nx graph, then plots this graph using MatPlotLib.</p>
+</dd>
+<dt>Parameters</dt><dd><dl class="simple">
+<dt>sn_dict<span class="classifier">dictionary</span></dt><dd><p>The social network to be plotted, in a NetworkX dictionary
+(JSON) node-link format.</p>
+</dd>
+<dt>file_name<span class="classifier">string</span></dt><dd><p>The name of the file to save the graph in. If not
+specified, the graph is not saved.</p>
+</dd>
+<dt>ax<span class="classifier">matplotlib.pyplot.axes.Axes</span></dt><dd><p>The set of axes to draw the graph on. If not specified, a new
+figure and axes are created.</p>
+</dd>
+<dt>title<span class="classifier">string</span></dt><dd><p>The title to display on the graph.</p>
+</dd>
+<dt>show<span class="classifier">bool</span></dt><dd><p>Determines if the graph is displayed after plotting. (default is False)</p>
+</dd>
+<dt>figure<span class="classifier">int</span></dt><dd><p>The figure number to plot the graph in. (default is 1)</p>
+</dd>
+<dt>close<span class="classifier">bool</span></dt><dd><p>Closes the graph after it has been plotted. (default is False)</p>
+</dd>
+<dt>circle<span class="classifier">bool</span></dt><dd><p>Plots the graph in a circular format. (default is False)</p>
+</dd>
+<dt>kamada_kawai<span class="classifier">bool</span></dt><dd><p>Plots the graph using the Kamada-Kawai force-directed algorithm. This
+is particularly useful for graphs with hubs, such as scale-free
+networks. Here, the size of the nodes in the plot scale with their
+degree. (default is False)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_k_ring">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_k_ring</code><span class="sig-paren">(</span><em class="sig-param">size=10</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_k_ring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a k-ring network of the specified size using
+SimDemopolis, and plots it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_qs_clustering">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_qs_clustering</code><span class="sig-paren">(</span><em class="sig-param">socnet_top='random1'</em>, <em class="sig-param">subdir='expt1'</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_qs_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a graph of quasi-stability against the local clustering
+coefficient, based on a previously-run experiment. Quasi stability is
+defined as the number of times the voting state changes divided by the
+number of experiment rounds.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_random">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_random</code><span class="sig-paren">(</span><em class="sig-param">size=10</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random network of the specified size using
+SimDemopolis, and plots it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_ring">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_ring</code><span class="sig-paren">(</span><em class="sig-param">size=10</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_ring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a ring network of the specified size using
+SimDemopolis, and plots it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_scale_free">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_scale_free</code><span class="sig-paren">(</span><em class="sig-param">size=20</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_scale_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a scale-free network of the specified size using
+SimDemopolis, and plots it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_scale_free_growth">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_scale_free_growth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_scale_free_growth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates and plots a scale-free networks of a range of sizes using
+SimDemopolis, to illustrate the growth of these networks.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_small_world">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_small_world</code><span class="sig-paren">(</span><em class="sig-param">size=10</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_small_world" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a small-world network of the specified size using
+SimDemopolis, and plots it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.plot_sn_growth">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">plot_sn_growth</code><span class="sig-paren">(</span><em class="sig-param">net_top</em>, <em class="sig-param">size</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">k=2</em><span class="sig-paren">)</span><a class="headerlink" href="#run.plot_sn_growth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.pp2dict">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">pp2dict</code><span class="sig-paren">(</span><em class="sig-param">pp_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.pp2dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the pretty-printed output of SimDemopolis into a Python
+dictionary. Generally use this in other functions - the functions above
+are largely helper functions for this.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pp_str</strong> (<em>string</em>) – The pretty-printed output of SimDemopolis.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The parsed output, in a python-accessible format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.sd2nx">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">sd2nx</code><span class="sig-paren">(</span><em class="sig-param">sd_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#run.sd2nx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary generated from SimDemopolis to one suitable for
+analysis by networkx.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.simDemopolis">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">simDemopolis</code><span class="sig-paren">(</span><em class="sig-param">interactive</em>, <em class="sig-param">ticks</em>, <em class="sig-param">socnet_top='scale_free2'</em>, <em class="sig-param">size=5</em>, <em class="sig-param">prob=0.25</em>, <em class="sig-param">k=2</em>, <em class="sig-param">m=1</em>, <em class="sig-param">has_skiver=False</em>, <em class="sig-param">stack_limit='100g'</em>, <em class="sig-param">table_space='50g'</em><span class="sig-paren">)</span><a class="headerlink" href="#run.simDemopolis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the SimDemopolis Prolog Queries, and return the stdout and stderr text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interactive</strong> (<em>bool</em>) – For debugging use only. If True, Prolog will run in interactive mode,
+which means that it’s text will print to Python’s output as it arrives,
+not after SimDemopolis is run. This enables the Prolog debugger to be
+run. After the run query of SimDemopolis is finished, Prolog enters
+interactive mode, so arbitrary queries can be entered by the user.
+(Note: this mode doesn’t work in IPython).</p></li>
+<li><p><strong>ticks</strong> (<em>int</em>) – Number of ticks (time units) in each round.</p></li>
+<li><p><strong>socnet_top</strong> (<em>string</em>) – Social network topology being investigated in the experiment. This
+must be one of ‘ring’, ‘scale_free1’, ‘random1’ or ‘small_world1’.
+The 1 at the end of the names is because there are 2 versions of
+the social network gernerating algorithms in SimDemopolis. The
+versions used here ensure that all nodes have at least one link.
+Whilst this makes the networks mathmatically imperfect, it prevents
+a divide-by-zero error in SimDemopolis.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the SimDemopolis social network. (default is 5)</p></li>
+<li><p><strong>prob</strong> (<em>float</em>) – Probability that a link is made for a random network, or
+probability a link is assigned for a small-world network. Does not
+apply to other networks. (default is 0.25)</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Average connectivity of a small_world network. Has no effect on
+other networks (default is 2)</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Number of links per new node for a scale-free network. Has no
+effect on other networks (default is 1)</p></li>
+<li><p><strong>stack_limit</strong> (<em>string</em>) – Amount of memory allocated to the Prolog stack. (Provided as a
+command-line argument to Prolog) See the SWI-Prolog documentation for
+more details. (default is ‘100g’)</p></li>
+<li><p><strong>table_space</strong> (<em>string</em>) – Amount of memory allocated to the Prolog table space. (Provided as a
+command-line argument to Prolog) See the SWI-Prolog documentation for
+more details.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.sk_k">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">sk_k</code><span class="sig-paren">(</span><em class="sig-param">k_list</em>, <em class="sig-param">has_skiver=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.sk_k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.sk_m">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">sk_m</code><span class="sig-paren">(</span><em class="sig-param">m_list</em>, <em class="sig-param">has_skiver=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.sk_m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.sk_prob">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">sk_prob</code><span class="sig-paren">(</span><em class="sig-param">socnet_top</em>, <em class="sig-param">prob_list</em>, <em class="sig-param">has_skiver=False</em><span class="sig-paren">)</span><a class="headerlink" href="#run.sk_prob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.splice_atom">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">splice_atom</code><span class="sig-paren">(</span><em class="sig-param">in_str</em><span class="sig-paren">)</span><a class="headerlink" href="#run.splice_atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the atom at the beginning of a string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns (head,tail)</dt>
+<dd class="field-odd"><p>The atom at the beginning of in_str as a string and the</p>
+</dd>
+</dl>
+<p>rest as a string
+:rtype: tuple</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.test_cp_graph">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_cp_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_cp_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_cp_m_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_cp_m_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_cp_m_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_cp_size_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_cp_size_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_cp_size_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_graph">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_k_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_k_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_k_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_m_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_m_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_m_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_parse">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the text parsing functionality from a samle SimDemopolis output from
+a file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="run.test_prob_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_prob_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_prob_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_size_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_size_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_size_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_sk_m_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_sk_m_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_sk_m_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_sk_size_plot_range">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_sk_size_plot_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_sk_size_plot_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="run.test_skiver_graph">
+<code class="sig-prename descclassname">run.</code><code class="sig-name descname">test_skiver_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#run.test_skiver_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">SimDemopolis</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Jeremy Pitt, James Arnold.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/run.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

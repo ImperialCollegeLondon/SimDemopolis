@@ -1,8 +1,0 @@
-SimDemopolis
-************
-
-* conf module
-
-* experiments module
-
-* run module
